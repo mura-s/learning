@@ -1,0 +1,13 @@
+.idea/
+target/
+wordcounts/
+
+derby.log
+metastore_db/
+
+tmp_model/
+tmp_out/
+
+CompViewPreditionLr.scala
+BreezeLRCompViewPredictor.scala
+MysqlJdbcWriter.scala
