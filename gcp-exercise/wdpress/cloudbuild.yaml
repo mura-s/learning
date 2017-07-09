@@ -1,0 +1,8 @@
+steps:
+- name: 'gcr.io/cloud-builders/go:alpine'
+  env: ['PROJECT_ROOT=wdpress']
+  args: ['build', '-o', 'hello-world', 'main.go']
+- name: 'gcr.io/cloud-builders/docker'
+  env: ['PROJECT_ROOT=wdpress']
+  args: ['build', '--tag=asia.gcr.io/$PROJECT_ID/wdpress/hello-world', '.']
+images: ['asia.gcr.io/$PROJECT_ID/wdpress/hello-world']

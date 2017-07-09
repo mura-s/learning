@@ -1,0 +1,16 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: hello-world
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        name: hello-world
+    spec:
+      containers:
+        - image: asia.gcr.io/wdpress-173204/wdpress/hello-world
+          imagePullPolicy: Always
+          name: hello-world
+

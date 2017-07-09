@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-world
+spec:
+  containers:
+    - image: asia.gcr.io/wdpress-173204/wdpress/hello-world
+      imagePullPolicy: Always
+      name: hello-world
