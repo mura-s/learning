@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Test</title>
+  </head>
+  <body>
+    <p>hoge</p>
+
+    <script>
+(function() {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      eval(this.response);
+    }
+  };
+  xhr.open("GET", "http://localhost:1323/tag", true);
+  xhr.send();
+})();
+    </script>
+  </body>
+</html>

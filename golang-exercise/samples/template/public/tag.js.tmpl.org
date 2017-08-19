@@ -1,0 +1,4 @@
+var env = "{{.Env}}";
+var tenantId = "{{.TenantID}}";
+var uid = "{{.UID}}";
+console.log("uid: " + uid);

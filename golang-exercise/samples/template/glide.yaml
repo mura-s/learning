@@ -1,0 +1,6 @@
+package: github.com/mura-s/learning/golang-exercise/samples/template
+import:
+- package: github.com/labstack/echo
+  version: ~3.2.1
+  subpackages:
+  - '...'
