@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ページタイトル</title>
+</head>
+<body>
+  コンテンツ
+  <script>
+    (function(){
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function(){
+          if (this.readyState==4 && this.status==200) {
+              // responseをhogehogeする
+            console.log("test")
+          }
+      };
+      xhr.open('GET', "http://127.0.0.1:1323/redirect");
+      xhr.send();
+    })();
+  </script>
+
+  <!--<script src="http://127.0.0.1:1323/redirect" />-->
+
+  <!--<img src="http://127.0.0.1:1323/redirect" />-->
+</body>
+</html>
