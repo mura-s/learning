@@ -1,0 +1,13 @@
+.idea/
+
+*.egg-info
+*.pyc
+.python-version
+pip-selfcheck.json
+
+bin/
+include/
+lib/
+project/
+target/
+
