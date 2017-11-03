@@ -25,7 +25,7 @@ class WordExtractingDoFn(beam.DoFn):
         self.word_lengths_dist = Metrics.distribution(self.__class__, 'word_len_dist')
         self.empty_line_counter = Metrics.counter(self.__class__, 'empty_lines')
 
-    def process(self, element):
+    def process(self, element, *args, **kwargs):
         """Returns an iterator over the words of this element."""
         text_line = element.strip()
         if not text_line:
@@ -59,7 +59,7 @@ def run(argv=None):
 
     def count_ones(word_ones):
         (word, ones) = word_ones
-        return (word, sum(ones))
+        return word, sum(ones)
 
     counts = (lines
               | 'split' >> (beam.ParDo(WordExtractingDoFn()).with_output_types(unicode))
@@ -77,7 +77,7 @@ def run(argv=None):
     result = p.run()
     result.wait_until_finish()
 
-    if (not hasattr(result, 'has_job') or result.has_job):
+    if not hasattr(result, 'has_job') or result.has_job:
         empty_line_filter = MetricsFilter().with_name('empty_lines')
         query_result = result.metrics().query(empty_line_filter)
         if query_result['counters']:
