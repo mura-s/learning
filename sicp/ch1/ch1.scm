@@ -18,3 +18,14 @@
   (sqrt-iter 1.0 x))
 
 ;; (print (sqrt 9))
+
+;; 1.2.1
+(define (factorial n)
+  (define (iter product counter)
+    (if (> counter n)
+      product
+      (iter (* product counter)
+            (+ counter 1))))
+  (iter 1 1))
+
+;;(print (factorial 6))
