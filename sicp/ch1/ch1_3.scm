@@ -1,5 +1,6 @@
 (use compat.sicp)
 
+;; 1.3.1
 (define (cube x) (* x x x))
 
 (define (inc n) (+ n 1))
@@ -37,3 +38,12 @@
 
 ;; (print (integral cube 0 1 0.01))
 ;; (print (integral cube 0 1 0.001))
+
+;; 1.3.2
+(define (pi-sum-lambda a b)
+    (sum (lambda (x) (/ 1.0 (* x (+ x 2))))
+         a
+         (lambda (x) (+ x 4))
+         b))
+
+;; (print (* 8 (pi-sum-lambda 1 1000)))
