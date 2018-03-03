@@ -47,3 +47,12 @@
          b))
 
 ;; (print (* 8 (pi-sum-lambda 1 1000)))
+
+(define (f x y)
+    (let ((a (+ 1 (* x y)))
+          (b (- 1 y)))
+        (+ (* x (square a))
+           (* y b)
+           (* a b))))
+
+(print (f 2 3))
