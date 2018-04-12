@@ -20,9 +20,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	src, err := generator.Generate(tokens)
+	clangCode, err := generator.Generate(tokens)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(src)
+	fmt.Println(clangCode)
 }
