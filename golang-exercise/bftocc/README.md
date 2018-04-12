@@ -11,6 +11,12 @@ make
 bin/bftocc < input/bf.txt > tmp/out.c
 ```
 
+or
+
+```
+echo "your Brainf*ck code" | bin/bftocc > ${output_file}
+```
+
 ## Build and Execute generated C code
 ```
 gcc -o tmp/out tmp/out.c
