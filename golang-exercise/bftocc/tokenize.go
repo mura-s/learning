@@ -4,6 +4,10 @@ import "fmt"
 
 type Token rune
 
+func (t Token) String() string {
+	return string(t)
+}
+
 const (
 	Add       = Token('+')
 	Sub       = Token('-')
@@ -24,6 +28,8 @@ func (t *Tokenizer) Tokenize(input string) ([]Token, error) {
 		switch Token(c) {
 		case Add, Sub, Right, Left, Read, Write, BeginLoop, EndLoop:
 			tokens = append(tokens, Token(c))
+		case ' ', '\n':
+			// do nothing
 		default:
 			return nil, fmt.Errorf("invalid input, index: %d, char: %c", i, c)
 		}
