@@ -1,7 +1,7 @@
 # bftocc
-Brainf*ck to C compiler written in Go
+Brainf*ck to C compiler written in Go.
 
-## build
+## Build
 ```
 make
 ```
