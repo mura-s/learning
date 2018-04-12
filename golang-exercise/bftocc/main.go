@@ -14,9 +14,6 @@ func main() {
 	}
 
 	tokenizer := &Tokenizer{}
-	tokens, err := tokenizer.Tokenize(string(input))
-	if err != nil {
-		log.Fatal(err)
-	}
+	tokens := tokenizer.Tokenize(string(input))
 	fmt.Println(tokens)
 }

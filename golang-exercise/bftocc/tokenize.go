@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type Token rune
 
 func (t Token) String() string {
@@ -21,19 +19,17 @@ const (
 
 type Tokenizer struct{}
 
-func (t *Tokenizer) Tokenize(input string) ([]Token, error) {
+func (t *Tokenizer) Tokenize(input string) []Token {
 	tokens := make([]Token, 0)
 
-	for i, c := range input {
+	for _, c := range input {
 		switch Token(c) {
 		case Add, Sub, Right, Left, Read, Write, BeginLoop, EndLoop:
 			tokens = append(tokens, Token(c))
-		case ' ', '\n':
-			// do nothing
 		default:
-			return nil, fmt.Errorf("invalid input, index: %d, char: %c", i, c)
+			// do nothing
 		}
 	}
 
-	return tokens, nil
+	return tokens
 }
