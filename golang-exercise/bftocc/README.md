@@ -1,6 +1,8 @@
 # bftocc
 Brainf*ck to C compiler written in Go.
 
+**bftocc** reads Brainf*ck code from STDIN, and prints C code to STDOUT.
+
 ## Build
 ```
 make
