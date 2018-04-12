@@ -1,6 +1,5 @@
 NAME=bftocc
 BIN_DIR=bin
-INPUT_BF=input/bf.txt
 
 all: clean build
 
@@ -9,7 +8,4 @@ build:
 
 clean:
 	rm -f $(BIN_DIR)/*
-
-run: build
-	$(BIN_DIR)/$(NAME) < $(INPUT_BF)
 

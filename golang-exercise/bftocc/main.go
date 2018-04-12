@@ -15,5 +15,14 @@ func main() {
 
 	tokenizer := &Tokenizer{}
 	tokens := tokenizer.Tokenize(string(input))
-	fmt.Println(tokens)
+
+	generator, err := NewGenerator()
+	if err != nil {
+		log.Fatal(err)
+	}
+	src, err := generator.Generate(tokens)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(src)
 }
