@@ -4,8 +4,10 @@
 # misc
 misc/test1
 misc/test2
+misc/test_asm1
 
 # executables & artifacts
 *.o
 tmp.s
+tmp
 mycc
