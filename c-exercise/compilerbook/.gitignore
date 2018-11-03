@@ -5,4 +5,7 @@
 misc/test1
 misc/test2
 
+# executables & artifacts
 *.o
+tmp.s
+mycc
