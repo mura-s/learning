@@ -22,4 +22,7 @@ try 42 42
 ## add and sub
 try 21 '5+20-4'
 
+## add and sub including space
+try 41 ' 12 + 34 - 5 '
+
 echo OK
