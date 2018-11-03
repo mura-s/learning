@@ -15,7 +15,11 @@ try() {
 }
 
 # test cases
+## read a number
 try 0 0
 try 42 42
+
+## add and sub
+try 21 '5+20-4'
 
 echo OK
