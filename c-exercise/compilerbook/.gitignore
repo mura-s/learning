@@ -1,0 +1,8 @@
+# vscode
+.vscode/
+
+# misc
+misc/test1
+misc/test2
+
+*.o
