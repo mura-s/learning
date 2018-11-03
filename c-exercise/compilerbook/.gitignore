@@ -5,6 +5,7 @@
 misc/test1
 misc/test2
 misc/test_asm1
+misc/test_asm2
 
 # executables & artifacts
 *.o
