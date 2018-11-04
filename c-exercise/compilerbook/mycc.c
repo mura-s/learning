@@ -14,6 +14,7 @@ typedef struct {
     char *input;
 } Token;
 
+int pos = 0;
 Token tokens[100];
 
 void tokenize(char *p) {
@@ -24,7 +25,8 @@ void tokenize(char *p) {
             continue;
         }
 
-        if (*p == '+' || *p == '-') {
+        if (*p == '+' || *p == '-' || *p == '*' || *p == '/' ||
+                *p == '(' || *p == ')') {
             tokens[i].ty = *p;
             tokens[i].input = p;
             i++;
@@ -48,9 +50,141 @@ void tokenize(char *p) {
     tokens[i].input = p;
 }
 
+// for debug
+void print_tokens() {
+    for (int i = 0; i < 100; i++) {
+        printf("%d, %d\n", tokens[i].ty, tokens[i].val);
+    }
+}
+
 void error(int i) {
     fprintf(stderr, "予期せぬトークンです: %s\n", tokens[i].input);
     exit(1);
+}
+
+enum {
+    ND_NUM = 256,
+};
+
+typedef struct Node {
+    int ty;
+    struct Node *lhs;
+    struct Node *rhs;
+    int val;
+} Node;
+
+Node *new_node(int op, Node *lhs, Node *rhs) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = op;
+    node->lhs = lhs;
+    node->rhs = rhs;
+    return node;
+}
+
+Node *new_node_num(int val) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_NUM;
+    node->val = val;
+    return node;
+}
+
+Node *expr();
+
+Node *term() {
+    if (tokens[pos].ty == TK_NUM)
+        return new_node_num(tokens[pos++].val);
+
+    if (tokens[pos].ty == '(') {
+        pos++;
+        Node *node = expr();
+        if (tokens[pos].ty != ')')
+            error(pos);
+
+        pos++;
+        return node;
+    }
+
+    error(pos);
+    return NULL;
+}
+
+Node *mul() {
+    Node *lhs = term();
+    int op = tokens[pos].ty;
+    if (op != '*' && op != '/')
+        return lhs;
+
+    if (op == '*') {
+        pos++;
+        return new_node('*', lhs, mul());
+    }
+
+    if (op == '/') {
+        pos++;
+        return new_node('/', lhs, mul());
+    }
+
+    error(pos);
+    return NULL;
+}
+
+Node *expr() {
+    Node *lhs = mul();
+    int op = tokens[pos].ty;
+    if (op != '+' && op != '-')
+        return lhs;
+
+    if (op == '+') {
+        pos++;
+        return new_node('+', lhs, expr());
+    }
+
+    if (op == '-') {
+        pos++;
+        return new_node('-', lhs, expr());
+    }
+
+    error(pos);
+    return NULL;
+}
+
+Node *parse() {
+    Node *node = expr();
+    if (tokens[pos].ty != TK_EOF)
+        error(pos);
+
+    return node;
+}
+
+void gen(Node *node) {
+    if (node->ty == ND_NUM) {
+        printf("    push %d\n", node->val);
+        return;
+    }
+
+    gen(node->lhs);
+    gen(node->rhs);
+
+    printf("    pop rdi\n");
+    printf("    pop rax\n");
+
+    switch (node->ty) {
+        case '+':
+            printf("    add rax, rdi\n");
+            break;
+        case '-':
+            printf("    sub rax, rdi\n");
+            break;
+        case '*':
+            printf("    mul rdi\n");
+            break;
+        case '/':
+            printf("    mov rdx, 0\n");
+            printf("    div rdi\n");
+            break;
+    }
+
+    printf("    push rax\n");
 }
 
 int main(int argc, char **argv) {
@@ -59,42 +193,19 @@ int main(int argc, char **argv) {
         return 1;
     }
 
+    // tokenize & parse
     tokenize(argv[1]);
+    Node *node = parse();
 
+    // generate code
     printf(".intel_syntax noprefix\n");
     printf(".global _main\n");
     printf("_main:\n");
 
-    if (tokens[0].ty != TK_NUM)
-        error(0);
+    gen(node);
 
-    printf("    mov rax, %d\n", tokens[0].val);
-
-    int i = 1;
-    while (tokens[i].ty != TK_EOF) {
-        if (tokens[i].ty == '+') {
-            i++;
-            if (tokens[i].ty != TK_NUM)
-                error(i);
-
-            printf("    add rax, %d\n", tokens[i].val);
-            i++;
-            continue;
-        }
-
-        if (tokens[i].ty == '-') {
-            i++;
-            if (tokens[i].ty != TK_NUM)
-                error(i);
-
-            printf("    sub rax, %d\n", tokens[i].val);
-            i++;
-            continue;
-        }
-
-        error(i);
-    }
-
+    printf("    pop rax\n");
     printf("    ret\n");
+
     return 0;
 }
