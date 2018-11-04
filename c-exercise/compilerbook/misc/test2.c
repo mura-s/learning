@@ -1,9 +1,7 @@
-int plus(int x, int y)
-{
+int plus(int x, int y) {
     return x + y;
 }
 
-int main()
-{
+int main() {
     return plus(3, 4);
 }
