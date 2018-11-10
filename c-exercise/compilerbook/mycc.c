@@ -5,6 +5,7 @@
 
 enum {
     TK_NUM = 256,
+    TK_IDENT,
     TK_EOF,
 };
 
@@ -14,8 +15,21 @@ typedef struct {
     char *input;
 } Token;
 
-int pos = 0;
+int token_pos = 0;
 Token tokens[100];
+
+// for debug
+void print_tokens() {
+    for (int i = 0; i < 100; i++) {
+        printf("%d, %d, %c\n", tokens[i].ty, tokens[i].val, *tokens[i].input);
+    }
+}
+
+void error(int i) {
+    fprintf(stderr, "予期せぬトークンです: %c\n", *tokens[i].input);
+    exit(1);
+}
+
 
 void tokenize(char *p) {
     int i = 0;
@@ -26,7 +40,7 @@ void tokenize(char *p) {
         }
 
         if (*p == '+' || *p == '-' || *p == '*' || *p == '/' ||
-                *p == '(' || *p == ')') {
+                *p == '(' || *p == ')' || *p == '=' || *p == ';') {
             tokens[i].ty = *p;
             tokens[i].input = p;
             i++;
@@ -42,6 +56,14 @@ void tokenize(char *p) {
             continue;
         }
 
+        if ('a' <= *p && *p <= 'z') {
+            tokens[i].ty = TK_IDENT;
+            tokens[i].input = p;
+            i++;
+            p++;
+            continue;
+        }
+
         fprintf(stderr, "トークナイズできません: '%s'\n", p);
         exit(1);
     }
@@ -50,27 +72,17 @@ void tokenize(char *p) {
     tokens[i].input = p;
 }
 
-// for debug
-void print_tokens() {
-    for (int i = 0; i < 100; i++) {
-        printf("%d, %d\n", tokens[i].ty, tokens[i].val);
-    }
-}
-
-void error(int i) {
-    fprintf(stderr, "予期せぬトークンです: %s\n", tokens[i].input);
-    exit(1);
-}
-
 enum {
     ND_NUM = 256,
+    ND_IDENT,
 };
 
 typedef struct Node {
     int ty;
     struct Node *lhs;
     struct Node *rhs;
-    int val;
+    int val;   // tyがND_NUMの場合のみ使う
+    char name; // tyがND_IDENTの場合のみ使う
 } Node;
 
 Node *new_node(int op, Node *lhs, Node *rhs) {
@@ -88,72 +100,146 @@ Node *new_node_num(int val) {
     return node;
 }
 
+Node *new_node_ident(char name) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_IDENT;
+    node->name = name;
+    return node;
+}
+
+int code_pos = 0;
+Node *codes[100];
+
+// for debug
+void print_codes() {
+    for (int i = 0; codes[i]; i++) {
+        printf("%d:\n", i);
+        printf("%d, %d, %c\n", codes[i]->ty, codes[i]->val, codes[i]->name);
+
+        Node *lhs = codes[i]->lhs;
+        if (lhs != NULL) {
+            printf("lhs, %d, %d, %c\n", lhs->ty, lhs->val, lhs->name);
+        }
+
+        Node *rhs = codes[i]->rhs;
+        if (rhs != NULL) {
+            printf("rhs, %d, %d, %c\n", rhs->ty, rhs->val, rhs->name);
+        }
+    }
+}
+
+// expr()の関数プロトタイプ宣言
 Node *expr();
 
 Node *term() {
-    if (tokens[pos].ty == TK_NUM)
-        return new_node_num(tokens[pos++].val);
+    if (tokens[token_pos].ty == TK_NUM)
+        return new_node_num(tokens[token_pos++].val);
 
-    if (tokens[pos].ty == '(') {
-        pos++;
+    if (tokens[token_pos].ty == TK_IDENT)
+        return new_node_ident(*tokens[token_pos++].input);
+
+    if (tokens[token_pos].ty == '(') {
+        token_pos++;
         Node *node = expr();
-        if (tokens[pos].ty != ')')
-            error(pos);
+        if (tokens[token_pos].ty != ')')
+            error(token_pos);
 
-        pos++;
+        token_pos++;
         return node;
     }
 
-    error(pos);
+    error(token_pos);
     return NULL;
 }
 
 Node *mul() {
     Node *lhs = term();
-    int op = tokens[pos].ty;
+    int op = tokens[token_pos].ty;
     if (op != '*' && op != '/')
         return lhs;
 
     if (op == '*') {
-        pos++;
+        token_pos++;
         return new_node('*', lhs, mul());
     }
 
     if (op == '/') {
-        pos++;
+        token_pos++;
         return new_node('/', lhs, mul());
     }
 
-    error(pos);
+    error(token_pos);
     return NULL;
 }
 
 Node *expr() {
     Node *lhs = mul();
-    int op = tokens[pos].ty;
+    int op = tokens[token_pos].ty;
     if (op != '+' && op != '-')
         return lhs;
 
     if (op == '+') {
-        pos++;
+        token_pos++;
         return new_node('+', lhs, expr());
     }
 
     if (op == '-') {
-        pos++;
+        token_pos++;
         return new_node('-', lhs, expr());
     }
 
-    error(pos);
+    error(token_pos);
     return NULL;
 }
 
-Node *parse() {
-    Node *node = expr();
-    if (tokens[pos].ty != TK_EOF)
-        error(pos);
+Node *_assign(Node *lhs) {
+    int op = tokens[token_pos].ty;
+    if (op != '=')
+        return lhs;
 
-    return node;
+    if (op == '=') {
+        token_pos++;
+        return new_node('=', lhs, _assign(expr()));
+    }
+
+    error(token_pos);
+    return NULL;
+}
+
+Node *assign() {
+    Node *code = _assign(expr());
+    int op = tokens[token_pos].ty;
+    if (op != ';')
+        error(token_pos);
+
+    if (op == ';') {
+        token_pos++;
+        return code;
+    }
+
+    error(token_pos);
+    return NULL;
+}
+
+void _program() {
+    if (tokens[token_pos].ty == TK_EOF)
+        return;
+
+    codes[code_pos] = assign();
+    code_pos++;
+    _program();
+}
+
+void program() {
+    codes[code_pos] = assign();
+    code_pos++;
+    _program();
+
+    if (tokens[token_pos].ty != TK_EOF)
+        error(token_pos);
+
+    codes[code_pos] = NULL;
+    return;
 }
 
 void gen(Node *node) {
@@ -195,14 +281,16 @@ int main(int argc, char **argv) {
 
     // tokenize & parse
     tokenize(argv[1]);
-    Node *node = parse();
+    program();
 
     // generate code
     printf(".intel_syntax noprefix\n");
     printf(".global _main\n");
     printf("_main:\n");
 
-    gen(node);
+    for (int i = 0; codes[i]; i++) {
+        gen(codes[i]);
+    }
 
     printf("    pop rax\n");
     printf("    ret\n");
