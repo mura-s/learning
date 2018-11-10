@@ -20,7 +20,7 @@ Token tokens[100];
 
 // for debug
 void print_tokens() {
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; tokens[i].ty != TK_EOF; i++) {
         printf("%d, %d, %c\n", tokens[i].ty, tokens[i].val, *tokens[i].input);
     }
 }
