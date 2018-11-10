@@ -16,18 +16,22 @@ try() {
 
 # test cases
 ## read a number
-try 0 0
-try 42 42
+try 0 '0;'
+try 42 '42;'
 
 ## add and sub
-try 21 '5+20-4'
+try 21 '5+20-4;'
 
 ## add and sub including space
-try 41 ' 12 + 34 - 5 '
+try 41 ' 12 + 34 - 5; '
 
 ## four arithmetic operations
-try 47 "5 + 6 * 7"
-try 15 "5*(9-6)"
-try 4 "(3+5)/2"
+try 47 "5 + 6 * 7;"
+try 15 "5*(9-6);"
+try 4 "(3+5)/2;"
+
+## 1 character local variables
+try 10 "a = 6; b = 4; a + b;"
+try 12 "a = b = 1; c = 3; (a + b) * c * 2;"
 
 echo OK

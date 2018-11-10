@@ -242,9 +242,40 @@ void program() {
     return;
 }
 
+void gen_lval(Node *node) {
+    if (node->ty == ND_IDENT) {
+        printf("    mov rax, rbp\n");
+        printf("    sub rax, %d\n", ('z' - node->name + 1) * 8);
+        printf("    push rax\n");
+        return;
+    }
+
+    fprintf(stderr, "代入の左辺値が変数ではありません");
+    exit(1);
+}
+
 void gen(Node *node) {
     if (node->ty == ND_NUM) {
         printf("    push %d\n", node->val);
+        return;
+    }
+
+    if (node->ty == ND_IDENT) {
+        gen_lval(node);
+        printf("    pop rax\n");
+        printf("    mov rax, [rax]\n");
+        printf("    push rax\n");
+        return;
+    }
+
+    if (node->ty == '=') {
+        gen_lval(node->lhs);
+        gen(node->rhs);
+
+        printf("    pop rdi\n");
+        printf("    pop rax\n");
+        printf("    mov [rax], rdi\n");
+        printf("    push rdi\n");
         return;
     }
 
@@ -288,11 +319,20 @@ int main(int argc, char **argv) {
     printf(".global _main\n");
     printf("_main:\n");
 
+    // prolog
+    printf("    push rbp\n");
+    printf("    mov rbp, rsp\n");
+    printf("    sub rsp, 208\n");
+
     for (int i = 0; codes[i]; i++) {
         gen(codes[i]);
+
+        printf("    pop rax\n");
     }
 
-    printf("    pop rax\n");
+    // epilog
+    printf("    mov rsp, rbp\n");
+    printf("    pop rbp\n");
     printf("    ret\n");
 
     return 0;
