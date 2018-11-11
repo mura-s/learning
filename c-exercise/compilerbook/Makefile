@@ -1,13 +1,20 @@
-mycc: mycc.c
+CC=clang
+CFLAGS=-Wall -std=c11
+SRCS=$(wildcard *.c)
+OBJS=$(SRCS:.c=.o)
 
-fmt:
-	clang-format -i *.c
-	# clang-format -i *.c *.h
+mycc: $(OBJS)
+	$(CC) -o $@ $(OBJS) $(LDFLAGS)
+
+$(OBJS): mycc.h
 
 test: mycc
 	./test.sh
 
+fmt:
+	clang-format -i *.c *.h
+
 clean:
 	rm -f mycc *.o tmp*
 
-.PHONY: fmt test clean
+.PHONY: test fmt clean
