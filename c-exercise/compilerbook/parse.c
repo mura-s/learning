@@ -116,14 +116,15 @@ static Node *compare() {
   return NULL;
 }
 
-static Node *_assign(Node *lhs) {
+static Node *_assign() {
+  Node *lhs = compare();
   int op = tokens[token_pos].ty;
   if (op != '=')
     return lhs;
 
   if (op == '=') {
     token_pos++;
-    return new_node('=', lhs, _assign(compare()));
+    return new_node('=', lhs, _assign());
   }
 
   parseError(token_pos);
@@ -131,7 +132,7 @@ static Node *_assign(Node *lhs) {
 }
 
 static Node *assign() {
-  Node *code = _assign(compare());
+  Node *code = _assign();
   int op = tokens[token_pos].ty;
   if (op != ';')
     parseError(token_pos);
@@ -155,8 +156,6 @@ static void _program() {
 }
 
 static void program() {
-  codes[code_pos] = assign();
-  code_pos++;
   _program();
 
   if (tokens[token_pos].ty != TK_EOF)
