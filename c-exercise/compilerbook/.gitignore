@@ -4,8 +4,8 @@
 # misc
 misc/test1
 misc/test2
-misc/test_asm1
-misc/test_asm2
+misc/test_asm1_for_mac
+misc/test_asm2_for_mac
 
 # executables & artifacts
 *.o

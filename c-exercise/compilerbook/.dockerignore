@@ -1,0 +1,15 @@
+# vscode
+.vscode
+
+# misc
+misc
+
+# executables & artifacts
+*.o
+tmp.s
+tmp
+mycc
+
+# other
+.git
+.gitignore
