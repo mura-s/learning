@@ -1,5 +1,7 @@
 #include "mycc.h"
 
+// 生成されるアセンブリはdocker or linux上で正しく動作する。
+// (mac上では動作しない。)
 int main(int argc, char **argv) {
   if (argc != 2) {
     fprintf(stderr, "引数の個数が正しくありません\n");
@@ -12,8 +14,8 @@ int main(int argc, char **argv) {
 
   // generate code
   printf(".intel_syntax noprefix\n");
-  printf(".global _main\n");
-  printf("_main:\n");
+  printf(".global main\n");
+  printf("main:\n");
 
   // prologue
   printf("    push rbp\n");

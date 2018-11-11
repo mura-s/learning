@@ -5,8 +5,7 @@ Node *codes[100];
 static int token_pos = 0;
 static int code_pos = 0;
 
-// expr()の関数プロトタイプ宣言
-static Node *expr();
+static Node *compare();
 
 static void parseError(int i) {
   fprintf(stderr, "予期せぬトークンです: %c\n", *tokens[i].input);
@@ -44,7 +43,7 @@ static Node *term() {
 
   if (tokens[token_pos].ty == '(') {
     token_pos++;
-    Node *node = expr();
+    Node *node = compare();
     if (tokens[token_pos].ty != ')')
       parseError(token_pos);
 
@@ -96,6 +95,27 @@ static Node *expr() {
   return NULL;
 }
 
+static Node *compare() {
+  Node *lhs = expr();
+  int op = tokens[token_pos].ty;
+  if (op != TK_EQ && op != TK_NE) {
+    return lhs;
+  }
+
+  if (op == TK_EQ) {
+    token_pos++;
+    return new_node(ND_EQ, lhs, expr());
+  }
+
+  if (op == TK_NE) {
+    token_pos++;
+    return new_node(ND_NE, lhs, expr());
+  }
+
+  parseError(token_pos);
+  return NULL;
+}
+
 static Node *_assign(Node *lhs) {
   int op = tokens[token_pos].ty;
   if (op != '=')
@@ -103,7 +123,7 @@ static Node *_assign(Node *lhs) {
 
   if (op == '=') {
     token_pos++;
-    return new_node('=', lhs, _assign(expr()));
+    return new_node('=', lhs, _assign(compare()));
   }
 
   parseError(token_pos);
@@ -111,7 +131,7 @@ static Node *_assign(Node *lhs) {
 }
 
 static Node *assign() {
-  Node *code = _assign(expr());
+  Node *code = _assign(compare());
   int op = tokens[token_pos].ty;
   if (op != ';')
     parseError(token_pos);

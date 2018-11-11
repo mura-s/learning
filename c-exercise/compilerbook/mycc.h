@@ -8,12 +8,14 @@
 enum {
   TK_NUM = 256,
   TK_IDENT,
+  TK_EQ,
+  TK_NE,
   TK_EOF,
 };
 
 typedef struct {
   int ty;
-  int val;
+  int val; // tyがTK_NUMの場合のみ使う
   char *input;
 } Token;
 
@@ -26,6 +28,8 @@ void tokenize(char *p);
 enum {
   ND_NUM = 256,
   ND_IDENT,
+  ND_EQ,
+  ND_NE,
 };
 
 typedef struct Node {
