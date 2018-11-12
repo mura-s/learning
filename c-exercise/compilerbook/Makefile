@@ -12,6 +12,7 @@ fmt:
 	clang-format -i *.c *.h
 
 test: mycc
+	./mycc -test
 	./test.sh
 
 clean:

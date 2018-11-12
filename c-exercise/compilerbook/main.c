@@ -8,6 +8,12 @@ int main(int argc, char **argv) {
     return 1;
   }
 
+  // unit test
+  if (strcmp(argv[1], "-test") == 0) {
+    runtest();
+    return 0;
+  }
+
   // tokenize & parse
   tokenize(argv[1]);
   parse();

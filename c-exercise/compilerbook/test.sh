@@ -15,6 +15,8 @@ try() {
 }
 
 # test cases
+echo "test.sh: start"
+
 ## read a number
 try 0 '0;'
 try 42 '42;'
@@ -43,4 +45,4 @@ try 6 "a = 1 == 1; a+5;"
 try 2 "a = (1 == 1); b = (1 != 1); a+b+1;"
 try 5 'a=(1==1)+(1!=1)*2+(0!=2)*4+(4!=4);a;'
 
-echo OK
+echo "test.sh: OK"
