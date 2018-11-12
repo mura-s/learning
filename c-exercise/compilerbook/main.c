@@ -15,8 +15,8 @@ int main(int argc, char **argv) {
   }
 
   // tokenize & parse
-  tokenize(argv[1]);
-  parse();
+  Vector *tokens = tokenize(argv[1]);
+  Vector *nodes = parse(tokens);
 
   // generate code
   printf(".intel_syntax noprefix\n");
@@ -28,8 +28,8 @@ int main(int argc, char **argv) {
   printf("    mov rbp, rsp\n");
   printf("    sub rsp, 208\n");
 
-  for (int i = 0; codes[i]; i++) {
-    gen(codes[i]);
+  for (int i = 0; i < nodes->len; i++) {
+    gen((Node *)nodes->data[i]);
 
     // 式の評価結果としてスタックに一つの値が残っているはずなので、スタックが溢れないようにポップしておく
     printf("    pop rax\n");

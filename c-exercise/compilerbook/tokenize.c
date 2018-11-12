@@ -1,6 +1,11 @@
 #include "mycc.h"
 
-Token tokens[100];
+static Token *new_token(int ty, char *input) {
+  Token *t = malloc(sizeof(Token));
+  t->ty = ty;
+  t->input = input;
+  return t;
+}
 
 static struct {
   char *name;
@@ -11,8 +16,8 @@ static struct {
     {NULL, 0},
 };
 
-void tokenize(char *p) {
-  int i = 0;
+Vector *tokenize(char *p) {
+  Vector *tokens = new_vector();
 
 loop:
   while (*p) {
@@ -23,15 +28,13 @@ loop:
     }
 
     // multi-letter symbol
-    for (int j = 0; symbols[j].name; j++) {
-      char *name = symbols[j].name;
+    for (int i = 0; symbols[i].name; i++) {
+      char *name = symbols[i].name;
       int len = strlen(name);
       if (strncmp(p, name, len))
         continue;
 
-      tokens[i].ty = symbols[j].ty;
-      tokens[i].input = p;
-      i++;
+      vec_push(tokens, new_token(symbols[i].ty, p));
       p += len;
       goto loop;
     }
@@ -39,28 +42,23 @@ loop:
     // single-letter token
     if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' ||
         *p == ')' || *p == '=' || *p == ';') {
-      tokens[i].ty = *p;
-      tokens[i].input = p;
-      i++;
+      vec_push(tokens, new_token(*p, p));
+      p++;
+      continue;
+    }
+
+    // identifier
+    if ('a' <= *p && *p <= 'z') {
+      vec_push(tokens, new_token(TK_IDENT, p));
       p++;
       continue;
     }
 
     // number
     if (isdigit(*p)) {
-      tokens[i].ty = TK_NUM;
-      tokens[i].input = p;
-      tokens[i].val = strtol(p, &p, 10);
-      i++;
-      continue;
-    }
-
-    // identifier
-    if ('a' <= *p && *p <= 'z') {
-      tokens[i].ty = TK_IDENT;
-      tokens[i].input = p;
-      i++;
-      p++;
+      Token *t = new_token(TK_NUM, p);
+      t->val = strtol(p, &p, 10);
+      vec_push(tokens, t);
       continue;
     }
 
@@ -68,6 +66,6 @@ loop:
     exit(1);
   }
 
-  tokens[i].ty = TK_EOF;
-  tokens[i].input = p;
+  vec_push(tokens, new_token(TK_EOF, p));
+  return tokens;
 }

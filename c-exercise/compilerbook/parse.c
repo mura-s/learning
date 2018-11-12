@@ -1,14 +1,13 @@
 #include "mycc.h"
 
-Node *codes[100];
-
-static int token_pos = 0;
-static int code_pos = 0;
+static Vector *tokens;
+static int token_pos;
 
 static Node *compare();
 
-static void parseError(int i) {
-  fprintf(stderr, "予期せぬトークンです: %c\n", *tokens[i].input);
+static void parse_error(int i) {
+  Token *t = tokens->data[i];
+  fprintf(stderr, "予期せぬトークン: %d, %d, %c\n", t->ty, t->val, *t->input);
   exit(1);
 }
 
@@ -35,134 +34,121 @@ static Node *new_node_ident(char name) {
 }
 
 static Node *term() {
-  if (tokens[token_pos].ty == TK_NUM)
-    return new_node_num(tokens[token_pos++].val);
+  Token *t1 = tokens->data[token_pos];
+  if (t1->ty == TK_NUM) {
+    token_pos++;
+    return new_node_num(t1->val);
+  }
 
-  if (tokens[token_pos].ty == TK_IDENT)
-    return new_node_ident(*tokens[token_pos++].input);
+  if (t1->ty == TK_IDENT) {
+    token_pos++;
+    return new_node_ident(*t1->input);
+  }
 
-  if (tokens[token_pos].ty == '(') {
+  if (t1->ty == '(') {
     token_pos++;
     Node *node = compare();
-    if (tokens[token_pos].ty != ')')
-      parseError(token_pos);
+    Token *t2 = tokens->data[token_pos];
+    if (t2->ty != ')')
+      parse_error(token_pos);
 
     token_pos++;
     return node;
   }
 
-  parseError(token_pos);
+  parse_error(token_pos);
   return NULL;
 }
 
 static Node *mul() {
   Node *lhs = term();
-  int op = tokens[token_pos].ty;
-  if (op != '*' && op != '/')
+  Token *t = tokens->data[token_pos];
+  if (t->ty != '*' && t->ty != '/')
     return lhs;
 
-  if (op == '*') {
+  if (t->ty == '*') {
     token_pos++;
     return new_node('*', lhs, mul());
   }
 
-  if (op == '/') {
+  if (t->ty == '/') {
     token_pos++;
     return new_node('/', lhs, mul());
   }
 
-  parseError(token_pos);
+  parse_error(token_pos);
   return NULL;
 }
 
 static Node *expr() {
   Node *lhs = mul();
-  int op = tokens[token_pos].ty;
-  if (op != '+' && op != '-')
+  Token *t = tokens->data[token_pos];
+  if (t->ty != '+' && t->ty != '-')
     return lhs;
 
-  if (op == '+') {
+  if (t->ty == '+') {
     token_pos++;
     return new_node('+', lhs, expr());
   }
 
-  if (op == '-') {
+  if (t->ty == '-') {
     token_pos++;
     return new_node('-', lhs, expr());
   }
 
-  parseError(token_pos);
+  parse_error(token_pos);
   return NULL;
 }
 
 static Node *compare() {
   Node *lhs = expr();
-  int op = tokens[token_pos].ty;
-  if (op != TK_EQ && op != TK_NE) {
+  Token *t = tokens->data[token_pos];
+  if (t->ty != TK_EQ && t->ty != TK_NE)
     return lhs;
-  }
 
-  if (op == TK_EQ) {
+  if (t->ty == TK_EQ) {
     token_pos++;
     return new_node(ND_EQ, lhs, expr());
   }
 
-  if (op == TK_NE) {
+  if (t->ty == TK_NE) {
     token_pos++;
     return new_node(ND_NE, lhs, expr());
   }
 
-  parseError(token_pos);
+  parse_error(token_pos);
   return NULL;
 }
 
 static Node *_assign() {
   Node *lhs = compare();
-  int op = tokens[token_pos].ty;
-  if (op != '=')
+  Token *t = tokens->data[token_pos];
+  if (t->ty != '=')
     return lhs;
 
-  if (op == '=') {
-    token_pos++;
-    return new_node('=', lhs, _assign());
-  }
-
-  parseError(token_pos);
-  return NULL;
+  // t->ty == '='
+  token_pos++;
+  return new_node('=', lhs, _assign());
 }
 
 static Node *assign() {
-  Node *code = _assign();
-  int op = tokens[token_pos].ty;
-  if (op != ';')
-    parseError(token_pos);
+  Node *node = _assign();
+  Token *t = tokens->data[token_pos];
+  if (t->ty != ';')
+    parse_error(token_pos);
 
-  if (op == ';') {
-    token_pos++;
-    return code;
-  }
-
-  parseError(token_pos);
-  return NULL;
+  // t->ty == ';'
+  token_pos++;
+  return node;
 }
 
-static void _program() {
-  if (tokens[token_pos].ty == TK_EOF)
-    return;
+Vector *parse(Vector *_tokens) {
+  tokens = _tokens;
+  token_pos = 0;
+  Vector *nodes = new_vector();
 
-  codes[code_pos] = assign();
-  code_pos++;
-  _program();
+  while (((Token *)tokens->data[token_pos])->ty != TK_EOF)
+    vec_push(nodes, assign());
+
+  return nodes;
 }
-
-static void program() {
-  _program();
-
-  if (tokens[token_pos].ty != TK_EOF)
-    parseError(token_pos);
-
-  codes[code_pos] = NULL;
-  return;
-}
-
-void parse() { return program(); }

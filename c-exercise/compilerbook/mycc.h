@@ -25,7 +25,7 @@ void map_put(Map *map, char *key, void *val);
 void *map_get(Map *map, char *key);
 
 void print_tokens();
-void print_codes();
+void print_nodes();
 
 void runtest();
 
@@ -45,9 +45,7 @@ typedef struct {
   char *input;
 } Token;
 
-extern Token tokens[100];
-
-void tokenize(char *p);
+Vector *tokenize(char *p);
 
 // parse
 
@@ -66,9 +64,7 @@ typedef struct Node {
   char name; // tyがND_IDENTの場合のみ使う
 } Node;
 
-extern Node *codes[100];
-
-void parse();
+Vector *parse(Vector *_tokens);
 
 // codegen
 

@@ -37,24 +37,27 @@ void *map_get(Map *map, char *key) {
 }
 
 // for debug tokenize
-void print_tokens() {
-  for (int i = 0; tokens[i].ty != TK_EOF; i++) {
-    printf("%d, %d, %c\n", tokens[i].ty, tokens[i].val, *tokens[i].input);
+void print_tokens(Vector *tokens) {
+  for (int i = 0; i < tokens->len; i++) {
+    Token *t = tokens->data[i];
+    printf("%d, %d, %c\n", t->ty, t->val, *t->input);
   }
 }
 
 // for debug parse
-void print_codes() {
-  for (int i = 0; codes[i]; i++) {
+void print_nodes(Vector *nodes) {
+  for (int i = 0; i < nodes->len; i++) {
     printf("%d:\n", i);
-    printf("%d, %d, %c\n", codes[i]->ty, codes[i]->val, codes[i]->name);
 
-    Node *lhs = codes[i]->lhs;
+    Node *node = nodes->data[i];
+    printf("%d, %d, %c\n", node->ty, node->val, node->name);
+
+    Node *lhs = node->lhs;
     if (lhs != NULL) {
       printf("lhs, %d, %d, %c\n", lhs->ty, lhs->val, lhs->name);
     }
 
-    Node *rhs = codes[i]->rhs;
+    Node *rhs = node->rhs;
     if (rhs != NULL) {
       printf("rhs, %d, %d, %c\n", rhs->ty, rhs->val, rhs->name);
     }
