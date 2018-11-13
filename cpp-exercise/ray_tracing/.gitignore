@@ -1,7 +1,0 @@
-main
-
-*.o
-*.d
-
-tmp/*.ppm
-
