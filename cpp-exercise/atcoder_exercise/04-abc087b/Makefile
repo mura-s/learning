@@ -12,6 +12,10 @@ $(TARGET): $(OBJS)
 fmt:
 	clang-format -i *.cpp
 
+.PHONY: test
+test:
+	./test.sh
+
 .PHONY: clean
 clean:
 	$(RM) $(TARGET) *.o
