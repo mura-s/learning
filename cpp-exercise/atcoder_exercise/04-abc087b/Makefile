@@ -2,17 +2,16 @@ CPP = clang++
 CPPFLAGS = -Wall -O2 -std=c++14
 
 TARGET = main
-SRC = main.cpp
+SRCS=$(wildcard *.cpp)
+OBJS=$(SRCS:.cpp=.o)
 
-# make
-all: clean $(TARGET)
+$(TARGET): $(OBJS)
+	$(CPP) $(CPPFLAGS) -o $@ $(OBJS)
 
-# make main
-$(TARGET):
-	$(CPP) $(CPPFLAGS) -o $@ $(SRC)
+.PHONY: fmt
+fmt:
+	clang-format -i *.cpp
 
-# make clean
 .PHONY: clean
 clean:
-	$(RM) $(TARGET)
-
+	$(RM) $(TARGET) *.o
