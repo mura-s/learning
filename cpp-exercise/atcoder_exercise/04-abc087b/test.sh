@@ -44,4 +44,4 @@ EOS
 )"
 try "213" "$input3"
 
-echo "test.sh: OK"
+echo "test.sh: ok"
