@@ -1,0 +1,9 @@
+version: '2'
+
+env:
+  GREETING: Hey, there!
+
+tasks:
+  greet:
+    cmds:
+      - echo $GREETING
