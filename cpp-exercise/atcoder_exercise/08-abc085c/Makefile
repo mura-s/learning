@@ -1,4 +1,4 @@
-CPP = clang++
+CPP = g++
 CPPFLAGS = -Wall -O2 -std=c++14
 
 TARGET = main
