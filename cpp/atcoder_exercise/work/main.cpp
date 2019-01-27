@@ -5,9 +5,10 @@
 using namespace std;
 
 int main() {
-  int N;
-  cin >> N;
+  string s = "abc";
+  string sub = s.substr(3);
 
-  cout << N << endl;
+  cout << s.length() << endl;
+  cout << sub << endl;
   return 0;
 }
