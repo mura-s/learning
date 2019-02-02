@@ -12,30 +12,27 @@ try() {
 }
 
 # test cases
-echo "start"
+echo "test.sh: start"
 
 # sample1
 input1="$(cat << EOS
-
+2 7
 EOS
 )"
-try "" "$input1"
-echo "sample1 ok"
+try "4" "$input1"
 
 # sample2
 input2="$(cat << EOS
-
+1 1
 EOS
 )"
-try "" "$input2"
-echo "sample2 ok"
+try "0" "$input2"
 
 # sample3
 input3="$(cat << EOS
-
+50 4321098765432109
 EOS
 )"
-try "" "$input3"
-echo "sample3 ok"
+try "2160549382716056" "$input3"
 
-echo "ok"
+echo "test.sh: ok"
