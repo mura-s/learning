@@ -1,15 +1,18 @@
 #include <algorithm>
-#include <climits>
-#include <cmath>
 #include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
 
 int main() {
-  int N;
-  cin >> N;
+  int X;
+  cin >> X;
 
-  cout << N << endl;
+  if (X == 3 || X == 5 || X == 7) {
+    cout << "YES" << endl;
+  } else {
+    cout << "NO" << endl;
+  }
+
   return 0;
 }
