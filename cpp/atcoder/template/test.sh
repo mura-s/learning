@@ -1,7 +1,7 @@
 #!/bin/bash
 try() {
-    expected="$1"
-    input="$2"
+    input="$1"
+    expected="$2"
 
     actual="$(echo $input | ./main)"
 
@@ -19,7 +19,11 @@ input1="$(cat << EOS
 
 EOS
 )"
-try "" "$input1"
+expected1="$(cat << EOS
+
+EOS
+)"
+try "$input1" "$expected1"
 echo "sample1 ok"
 
 # sample2
@@ -27,7 +31,11 @@ input2="$(cat << EOS
 
 EOS
 )"
-try "" "$input2"
+expected2="$(cat << EOS
+
+EOS
+)"
+try "$input2" "$expected2"
 echo "sample2 ok"
 
 # sample3
@@ -35,7 +43,11 @@ input3="$(cat << EOS
 
 EOS
 )"
-try "" "$input3"
+expected3="$(cat << EOS
+
+EOS
+)"
+try "$input3" "$expected3"
 echo "sample3 ok"
 
 echo "ok"
