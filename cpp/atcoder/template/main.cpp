@@ -18,6 +18,6 @@ int main() {
   int N;
   cin >> N;
 
-  cout << N << "\n";
+  cout << N << endl;
   return 0;
 }
