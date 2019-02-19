@@ -12,28 +12,7 @@
 #include <vector>
 using namespace std;
 
-// 素因数分解
-vector<pair<long, long>> prime_factorize(long n) {
-  vector<pair<long, long>> v;
-
-  for (long p = 2; p * p <= n; ++p) {
-    if (n % p != 0) {
-      continue;
-    }
-    long num = 0;
-    while (n % p == 0) {
-      ++num;
-      n /= p;
-    }
-    v.push_back(make_pair(p, num));
-  }
-
-  if (n != 1) {
-    v.push_back(make_pair(n, 1));
-  }
-
-  return v;
-}
+// ref. http://drken1215.hatenablog.com/entry/2018/06/08/210000
 
 const int MOD = 1000000007;
 const int MAX = 200001;
@@ -67,16 +46,6 @@ int main() {
   ios::sync_with_stdio(false);
   comb_init();
 
-  long N, M;
-  cin >> N >> M;
-  vector<pair<long, long>> primes = prime_factorize(M);
-
-  long res = 1;
-  for (auto &p : primes) {
-    long num = p.second;
-    res = (res * comb(num + N - 1, N - 1)) % MOD;
-  }
-
-  cout << res << endl;
+  cout << comb(10, 3) << endl;
   return 0;
 }
