@@ -16,11 +16,11 @@ echo "start"
 
 # sample1
 input1="$(cat << EOS
-
+125
 EOS
 )"
 expected1="$(cat << EOS
-
+176
 EOS
 )"
 try "$input1" "$expected1"
@@ -28,26 +28,14 @@ echo "sample1 ok"
 
 # sample2
 input2="$(cat << EOS
-
+9999999999
 EOS
 )"
 expected2="$(cat << EOS
-
+12656242944
 EOS
 )"
 try "$input2" "$expected2"
 echo "sample2 ok"
-
-# sample3
-input3="$(cat << EOS
-
-EOS
-)"
-expected3="$(cat << EOS
-
-EOS
-)"
-try "$input3" "$expected3"
-echo "sample3 ok"
 
 echo "ok"
