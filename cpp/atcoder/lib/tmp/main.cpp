@@ -15,6 +15,6 @@ using namespace std;
 int main() {
   int N = 0;
 
-  cout << N << "\n";
+  cout << N << endl;
   return 0;
 }
