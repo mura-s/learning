@@ -10,14 +10,14 @@
 #include <set>
 #include <string>
 #include <vector>
-
 using namespace std;
 typedef long long ll;
+
+int N;
 
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int N;
   cin >> N;
 
   cout << N << endl;
