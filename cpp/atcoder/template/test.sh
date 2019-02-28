@@ -19,7 +19,6 @@ try() {
         all_ac=false
         return
     fi
-
     echo "AC"
     echo
 }
