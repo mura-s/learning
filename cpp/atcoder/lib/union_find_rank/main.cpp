@@ -19,7 +19,7 @@ const int MAX_N = 101;
 
 // 親
 int par[MAX_N];
-// 木の深さ
+// 木の深さ (rank)
 int depth[MAX_N];
 
 void init(int n) {
