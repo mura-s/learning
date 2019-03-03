@@ -13,6 +13,8 @@
 using namespace std;
 typedef long long ll;
 
+// ref. 蟻本
+
 const int MAX_N = 101;
 
 // 親
