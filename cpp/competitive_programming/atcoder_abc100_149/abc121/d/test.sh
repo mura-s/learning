@@ -26,33 +26,33 @@ try() {
 # test cases
 echo "[Sample1]"
 input1="$(cat << EOS
-
+2 4
 EOS
 )"
 expected1="$(cat << EOS
-
+5
 EOS
 )"
 try "$input1" "$expected1"
 
 echo "[Sample2]"
 input2="$(cat << EOS
-
+123 456
 EOS
 )"
 expected2="$(cat << EOS
-
+435
 EOS
 )"
 try "$input2" "$expected2"
 
 echo "[Sample3]"
 input3="$(cat << EOS
-
+123456789012 123456789012
 EOS
 )"
 expected3="$(cat << EOS
-
+123456789012
 EOS
 )"
 try "$input3" "$expected3"

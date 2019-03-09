@@ -13,13 +13,24 @@
 using namespace std;
 typedef long long ll;
 
-int N;
+int H, W;
+int h, w;
 
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  cin >> N;
+  cin >> H >> W;
+  cin >> h >> w;
 
-  cout << N << endl;
+  int ans = 0;
+  for (int i = 0; i < H; i++) {
+    for (int j = 0; j < W; j++) {
+      if (i >= h && j >= w) {
+        ans++;
+      }
+    }
+  }
+
+  cout << ans << endl;
   return 0;
 }
