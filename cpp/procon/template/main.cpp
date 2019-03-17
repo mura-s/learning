@@ -12,6 +12,7 @@
 #include <vector>
 using namespace std;
 typedef long long ll;
+const long MOD = 1000000007;
 
 int N;
 
