@@ -26,7 +26,6 @@ edge es[MAX_E];
 // 最短距離
 int d[MAX_V];
 int V, E;
-int r;
 
 bool bellman_ford(int s) {
   fill(d, d + V, INF);
@@ -58,6 +57,7 @@ bool bellman_ford(int s) {
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
+  int r;
   cin >> V >> E >> r;
   for (int i = 0; i < E; i++) {
     int si, ti, di;
