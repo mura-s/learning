@@ -28,7 +28,7 @@ ll gcd(ll a, ll b) {
 
 ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }
 
-// 拡張gcd: ax + by = gcd(a, b) の整数解 (x, y) と求める.
+// 拡張gcd: ax + by = gcd(a, b) の整数解 (x, y) を求める.
 // 返り値は gcd(a, b) の結果.
 // ref. 蟻本
 ll extgcd(ll a, ll b, ll &x, ll &y) {
