@@ -12,6 +12,8 @@
 #include <vector>
 using namespace std;
 typedef long long ll;
+// const int INF = 2000000000;
+// const long MOD = 1000000007;
 
 bool is_prime(int x) {
   for (int i = 2; i * i <= x; i++) {
@@ -22,13 +24,12 @@ bool is_prime(int x) {
   return true;
 }
 
+int N;
+
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  int a = 13;
-  int b = 15;
-
-  cout << is_prime(a) << endl;
-  cout << is_prime(b) << endl;
+  cin >> N;
+  cout << (is_prime(N) ? "YES" : "NO") << endl;
   return 0;
 }

@@ -13,7 +13,7 @@
 using namespace std;
 typedef long long ll;
 // const int INF = 2000000000;
-// const long MOD = 1000000007;
+// const ll MOD = 1000000007;
 
 int N;
 

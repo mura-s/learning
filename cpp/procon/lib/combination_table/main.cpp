@@ -11,12 +11,13 @@
 #include <string>
 #include <vector>
 using namespace std;
+typedef long long ll;
 
 // ref. http://drken1215.hatenablog.com/entry/2018/06/08/210000
 
-const int MOD = 1000000007;
+const ll MOD = 1000000007;
 const int MAX = 200001;
-long fac[MAX], finv[MAX], inv[MAX];
+ll fac[MAX], finv[MAX], inv[MAX];
 
 // テーブルを作る前処理
 void comb_init() {
@@ -31,7 +32,7 @@ void comb_init() {
 }
 
 // 二項係数計算 (combination. nCkを求める.)
-long comb(int n, int k) {
+ll comb(int n, int k) {
   if (n < k) {
     return 0;
   }
