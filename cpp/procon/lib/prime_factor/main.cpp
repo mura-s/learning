@@ -13,7 +13,7 @@
 using namespace std;
 
 // 素因数分解
-vector<pair<long, long>> prime_factorize(long n) {
+vector<pair<long, long>> prime_factor(long n) {
   vector<pair<long, long>> v;
 
   for (long p = 2; p * p <= n; ++p) {
@@ -40,7 +40,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   long M = 48;
-  vector<pair<long, long>> primes = prime_factorize(M);
+  vector<pair<long, long>> primes = prime_factor(M);
 
   for (auto &e : primes) {
     cout << e.first << " " << e.second << endl;
