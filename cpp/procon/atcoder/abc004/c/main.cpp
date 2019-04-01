@@ -12,28 +12,24 @@
 #include <vector>
 using namespace std;
 typedef long long ll;
-const int INF = pow(10, 9);
 
 int N;
-vector<int> cs;
-int dp[30001];
 
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
   cin >> N;
-  cs.resize(N);
-  for (int i = 0; i < N; i++) {
-    cin >> cs[i];
-  }
-  fill(dp, dp + 30001, INF);
+  N = N % 30;
+  int vals[6] = {1, 2, 3, 4, 5, 6};
 
-  // 最長部分列を高速に求める
-  // https://www.slideshare.net/chokudai/abc006
   for (int i = 0; i < N; i++) {
-    *lower_bound(dp, dp + 30001, cs[i]) = cs[i];
+    swap(vals[i % 5], vals[(i % 5) + 1]);
   }
 
-  cout << N - (lower_bound(dp, dp + 30001, INF) - dp) << endl;
+  for (int i = 0; i < 6; i++) {
+    cout << vals[i];
+  }
+  cout << endl;
+
   return 0;
 }
