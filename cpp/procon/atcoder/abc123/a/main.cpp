@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <climits>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -14,13 +13,20 @@ typedef long long ll;
 // const int INF = 2000000000;
 // const ll MOD = 1000000007;
 
-int N;
+int a, b, c, d, e;
+int k;
 
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  cin >> N;
+  cin >> a >> b >> c >> d >> e;
+  cin >> k;
 
-  cout << N << endl;
+  if (e - a <= k) {
+    cout << "Yay!" << endl;
+  } else {
+    cout << ":(" << endl;
+  }
+
   return 0;
 }
