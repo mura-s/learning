@@ -38,8 +38,8 @@ int main() {
 
   bool ans = true;
   int a_idx = N - 1;
-  for (int i = 1; i <= M; i++) {
-    int bi = B[M - i];
+  for (int i = M - 1; i >= 0; i--) {
+    int bi = B[i];
     bool ok = false;
     for (int j = a_idx; j >= 0; j--) {
       int ai = A[j];
@@ -50,8 +50,6 @@ int main() {
         ok = true;
         a_idx = j - 1;
         break;
-      } else {
-        continue;
       }
     }
 
