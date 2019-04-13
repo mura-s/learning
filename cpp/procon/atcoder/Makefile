@@ -1,38 +1,32 @@
-# tasks
+# parameter
+# e.g. abc001 or abc001/a
+DIR :=
 
-# e.g. abc001
-NAME :=
+# tasks
 .PHONY: abc
-abc: .check-name
-	mkdir $(NAME)
-	cp -r ../template $(NAME)/a
-	cp -r ../template $(NAME)/b
-	cp -r ../template $(NAME)/c
-	cp -r ../template $(NAME)/d
+abc: .check-dir
+	mkdir $(DIR)
+	cp -r ../template $(DIR)/a
+	cp -r ../template $(DIR)/b
+	cp -r ../template $(DIR)/c
+	cp -r ../template $(DIR)/d
 
 .PHONY: agc
-agc: .check-name
-	mkdir $(NAME)
-	cp -r ../template $(NAME)/a
-	cp -r ../template $(NAME)/b
-	cp -r ../template $(NAME)/c
-	cp -r ../template $(NAME)/d
-	cp -r ../template $(NAME)/e
-	cp -r ../template $(NAME)/f
+agc: .check-dir
+	mkdir $(DIR)
+	cp -r ../template $(DIR)/a
+	cp -r ../template $(DIR)/b
+	cp -r ../template $(DIR)/c
+	cp -r ../template $(DIR)/d
+	cp -r ../template $(DIR)/e
+	cp -r ../template $(DIR)/f
 
-# e.g. abc001/a
-DIR :=
 .PHONY: dir
 dir: .check-dir
 	mkdir -p $(DIR)
 	cp ../template/* $(DIR)/
 
 # internal tasks
-.check-name:
-ifeq ($(NAME),)
-	$(error NAME is required.)
-endif
-
 .check-dir:
 ifeq ($(DIR),)
 	$(error DIR is required.)
