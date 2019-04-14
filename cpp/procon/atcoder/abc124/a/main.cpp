@@ -22,21 +22,15 @@ int main() {
   cin >> A >> B;
 
   int sum = 0;
-  if (A > B) {
-    sum += A;
-    A--;
-  } else {
-    sum += B;
-    B--;
+  for (int i = 0; i < 2; i++) {
+    if (A > B) {
+      sum += A;
+      A--;
+    } else {
+      sum += B;
+      B--;
+    }
   }
-  if (A > B) {
-    sum += A;
-    A--;
-  } else {
-    sum += B;
-    B--;
-  }
-
   cout << sum << endl;
   return 0;
 }
