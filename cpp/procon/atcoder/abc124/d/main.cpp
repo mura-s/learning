@@ -24,39 +24,41 @@ int main() {
   cin >> S;
 
   int ans = 0;
-  queue<int> q;
+  int l = 0, r = 0;
 
-  int sum = 0;
-  int n = 0; // 連続した同じ値の数
-  int k = 0; // 0に変わった数
-  bool flag = (S[0] == '0');
-
-  int i = 0;
-  while (i < N) {
-    char c = S[i];
-    while (c == S[i]) {
-      n++;
-      i++;
+  // 最初のrの位置まで進める
+  int num_zero = 0;
+  while (r < N) {
+    while (r < N && S[r] == '1') {
+      r++;
     }
-    if (c == '0') {
-      k++;
-      if (k > K) {
-        if (!flag) {
-          int f1 = q.front();
-          q.pop();
-          sum -= f1;
-        }
-        int f2 = q.front();
-        q.pop();
-        sum -= f2;
-        flag = false;
-      }
+    if (++num_zero > K) {
+      break;
+    }
+    while (r < N && S[r] == '0') {
+      r++;
+    }
+  }
+  ans = max(ans, r - l);
+
+  // l, rを動かしながら、最大のansを求める
+  while (r < N) {
+    // lを進める
+    while (l < N && S[l] == '1') {
+      l++;
+    }
+    while (l < N && S[l] == '0') {
+      l++;
     }
 
-    q.push(n);
-    sum += n;
-    n = 0;
-    ans = max(ans, sum);
+    // rを進める
+    while (r < N && S[r] == '0') {
+      r++;
+    }
+    while (r < N && S[r] == '1') {
+      r++;
+    }
+    ans = max(ans, r - l);
   }
 
   cout << ans << endl;
