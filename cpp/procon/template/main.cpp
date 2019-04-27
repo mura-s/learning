@@ -11,8 +11,8 @@
 #include <vector>
 using namespace std;
 typedef long long ll;
-// const int INF = 2000000000;
 // const ll MOD = 1000000007;
+// const int INF = 2000000000;
 
 int N;
 
@@ -21,6 +21,8 @@ int main() {
   cin.tie(0);
   cin >> N;
 
-  cout << N << endl;
+  int ans = 0;
+
+  cout << ans << endl;
   return 0;
 }
