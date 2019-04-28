@@ -62,12 +62,12 @@ try "$input3" "$expected3"
 
 echo "[Sample4]"
 input4="$(cat << EOS
-5
-12 12 15 18 18
+4
+6 2 5 3
 EOS
 )"
 expected4="$(cat << EOS
-6
+1
 EOS
 )"
 try "$input4" "$expected4"
