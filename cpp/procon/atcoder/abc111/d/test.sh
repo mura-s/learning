@@ -1,4 +1,6 @@
 #!/bin/bash
+all_ac=true
+
 try() {
     input="$1"
     expected="$2"
@@ -6,15 +8,23 @@ try() {
     actual="$(echo $input | ./main)"
 
     if [ "$actual" != "$expected" ]; then
-        echo "$expected expected, but got $actual"
-        exit 1
+        echo "WA"
+        echo "expected:"
+        echo "$expected"
+        echo
+        echo "actual:"
+        echo "$actual"
+        echo
+
+        all_ac=false
+        return
     fi
+    echo "AC"
+    echo
 }
 
 # test cases
-echo "start"
-
-# sample1
+echo "[Sample1]"
 input1="$(cat << EOS
 3
 -1 0
@@ -28,12 +38,12 @@ expected1="$(cat << EOS
 RL
 UU
 DR
+
 EOS
 )"
 try "$input1" "$expected1"
-echo "sample1 ok"
 
-# sample2
+echo "[Sample2]"
 input2="$(cat << EOS
 5
 0 0
@@ -48,9 +58,8 @@ expected2="$(cat << EOS
 EOS
 )"
 try "$input2" "$expected2"
-echo "sample2 ok"
 
-# sample3
+echo "[Sample3]"
 input3="$(cat << EOS
 2
 1 1
@@ -62,12 +71,12 @@ expected3="$(cat << EOS
 1 1
 RU
 UR
+
 EOS
 )"
 try "$input3" "$expected3"
-echo "sample3 ok"
 
-# sample4
+echo "[Sample4]"
 input4="$(cat << EOS
 3
 -7 -3
@@ -84,6 +93,11 @@ DULRD
 EOS
 )"
 try "$input4" "$expected4"
-echo "sample4 ok"
 
-echo "ok"
+echo "[Result]"
+if ! $all_ac; then
+    echo "WA"
+    echo
+    exit 1
+fi
+echo "All AC"
