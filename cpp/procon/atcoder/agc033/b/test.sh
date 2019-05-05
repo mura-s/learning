@@ -66,6 +66,20 @@ EOS
 )"
 try "$input3" "$expected3"
 
+echo "[Sample4]"
+input4="$(cat << EOS
+3 3 4
+2 2
+DRLL
+RUDD
+EOS
+)"
+expected4="$(cat << EOS
+NO
+EOS
+)"
+try "$input4" "$expected4"
+
 echo "[Result]"
 if ! $all_ac; then
     echo "WA"

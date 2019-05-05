@@ -27,49 +27,46 @@ int main() {
   sc--;
   cin >> S >> T;
 
-  int max_l = sc;
-  int max_r = sc;
-  int max_u = sr;
-  int max_d = sr;
+  int l = 0;
+  int r = W - 1;
+  int u = 0;
+  int d = H - 1;
 
-  bool flag = true;
-  for (int i = 0; i < N; i++) {
-    // takahashi
-    if (S[i] == 'L') {
-      max_l--;
-    }
-    if (S[i] == 'R') {
-      max_r++;
-    }
-    if (S[i] == 'U') {
-      max_u--;
-    }
-    if (S[i] == 'D') {
-      max_d++;
-    }
-
-    // result
-    if (max_l < 0 || max_r >= W || max_u < 0 || max_d >= H) {
-      flag = false;
+  for (int i = N - 1; i >= 0; i--) {
+    if (r < l || d < u) {
       break;
     }
 
-    // aoki
-    if (T[i] == 'L' && max_r - 1 >= 0) {
-      max_r--;
+    // T
+    if (T[i] == 'L' && r + 1 <= W - 1) {
+      r++;
     }
-    if (T[i] == 'R' && max_l + 1 < W) {
-      max_l++;
+    if (T[i] == 'R' && l - 1 >= 0) {
+      l--;
     }
-    if (T[i] == 'U' && max_d - 1 >= 0) {
-      max_d--;
+    if (T[i] == 'U' && d + 1 <= H - 1) {
+      d++;
     }
-    if (T[i] == 'D' && max_u + 1 < H) {
-      max_u++;
+    if (T[i] == 'D' && u - 1 >= 0) {
+      u--;
+    }
+
+    // S
+    if (S[i] == 'L') {
+      l++;
+    }
+    if (S[i] == 'R') {
+      r--;
+    }
+    if (S[i] == 'U') {
+      u++;
+    }
+    if (S[i] == 'D') {
+      d--;
     }
   }
 
-  if (flag) {
+  if (l <= sc && sc <= r && u <= sr && sr <= d) {
     cout << "YES" << endl;
   } else {
     cout << "NO" << endl;
