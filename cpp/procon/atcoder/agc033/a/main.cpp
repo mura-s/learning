@@ -38,29 +38,21 @@ int main() {
     auto p = q.front();
     q.pop();
     int h = p.first, w = p.second;
-    if (h - 1 >= 0 && g[h - 1][w] != 0) {
-      if (g[h - 1][w] > g[h][w] + 1) {
-        g[h - 1][w] = g[h][w] + 1;
-        q.push(make_pair(h - 1, w));
-      }
+    if (h - 1 >= 0 && g[h - 1][w] == INF) {
+      g[h - 1][w] = g[h][w] + 1;
+      q.push(make_pair(h - 1, w));
     }
-    if (w - 1 >= 0 && g[h][w - 1] != 0) {
-      if (g[h][w - 1] > g[h][w] + 1) {
-        g[h][w - 1] = g[h][w] + 1;
-        q.push(make_pair(h, w - 1));
-      }
+    if (w - 1 >= 0 && g[h][w - 1] == INF) {
+      g[h][w - 1] = g[h][w] + 1;
+      q.push(make_pair(h, w - 1));
     }
-    if (h + 1 < H && g[h + 1][w] != 0) {
-      if (g[h + 1][w] > g[h][w] + 1) {
-        g[h + 1][w] = g[h][w] + 1;
-        q.push(make_pair(h + 1, w));
-      }
+    if (h + 1 < H && g[h + 1][w] == INF) {
+      g[h + 1][w] = g[h][w] + 1;
+      q.push(make_pair(h + 1, w));
     }
-    if (w + 1 < W && g[h][w + 1] != 0) {
-      if (g[h][w + 1] > g[h][w] + 1) {
-        g[h][w + 1] = g[h][w] + 1;
-        q.push(make_pair(h, w + 1));
-      }
+    if (w + 1 < W && g[h][w + 1] == INF) {
+      g[h][w + 1] = g[h][w] + 1;
+      q.push(make_pair(h, w + 1));
     }
   }
 
