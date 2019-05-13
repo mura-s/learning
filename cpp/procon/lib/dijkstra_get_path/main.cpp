@@ -26,6 +26,7 @@ vector<edge> G[MAX_V];
 int d[MAX_V];
 int prev_path[MAX_V]; // prev_path[i]の流入元の点
 
+// 負辺のない単一始点全点間最短路を求めるアルゴリズム。
 // 蟻本参照
 void dijkstra(int s) {
   priority_queue<P, vector<P>, greater<P>> que;

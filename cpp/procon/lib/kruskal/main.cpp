@@ -52,6 +52,8 @@ bool comp(const edge &e1, const edge &e2) { return e1.cost < e2.cost; }
 edge es[MAX_E];
 int V, E;
 
+// 最小全域木 (全域木のうち、その辺群の重みの総和が最小になる木)
+// を求めるアルゴリズム
 int kruskal() {
   sort(es, es + E, comp);
   uf_tree uf(V);

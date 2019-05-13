@@ -23,6 +23,8 @@ typedef pair<int, int> P; // firstは重み, secondは頂点の番号
 int V, E;
 vector<edge> G[MAX_V];
 
+// 最小全域木 (全域木のうち、その辺群の重みの総和が最小になる木)
+// を求めるアルゴリズム
 // https://ei1333.github.io/luzhiled/snippets/graph/prim.html
 int prim() {
   int ans = 0;

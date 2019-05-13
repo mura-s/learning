@@ -27,7 +27,10 @@ edge es[MAX_E];
 int d[MAX_V];
 int V, E;
 
+// 単一始点全点間最短路を求めるアルゴリズム。
+// 負辺があっても動作する。また負閉路も検出する。
 // ref. https://ei1333.github.io/luzhiled/snippets/graph/bellman-ford.html
+//
 // - falseを返す場合は負の経路が存在.
 // - d[i]がINFの場合は経路が存在しない.
 bool bellman_ford(int s) {

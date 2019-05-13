@@ -19,6 +19,8 @@ const int MAX_V = 101;
 int d[MAX_V][MAX_V];
 int V, E;
 
+// 隣接行列で表されるグラフの全点間最短路を求めるアルゴリズム。
+// 負辺があっても動作する。負閉路が存在する場合はそれも検出する。
 // https://ei1333.github.io/luzhiled/snippets/graph/warshall-floyd.html
 void warshall_floyd() {
   for (int k = 0; k < V; k++) {

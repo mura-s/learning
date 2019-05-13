@@ -13,6 +13,7 @@
 using namespace std;
 typedef long long ll;
 
+// 約数列挙
 vector<int> divisor(int n) {
   vector<int> res;
   for (int i = 1; i * i <= n; i++) {

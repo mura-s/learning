@@ -25,6 +25,7 @@ int V, E;
 vector<edge> G[MAX_V];
 int d[MAX_V];
 
+// 負辺のない単一始点全点間最短路を求めるアルゴリズム。
 // 蟻本参照
 void dijkstra(int s) {
   priority_queue<P, vector<P>, greater<P>> que;

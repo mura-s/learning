@@ -13,6 +13,7 @@
 using namespace std;
 
 // 素因数分解
+// 素数の値と個数のpairのvectorを返す
 vector<pair<long, long>> prime_factor(long n) {
   vector<pair<long, long>> v;
 
