@@ -16,7 +16,7 @@ typedef long long ll;
 // ref. https://www.kaoken.cg0.xyz/math_combination/
 
 // 組み合わせ (combination) を求める
-ll nCr(int n, int r) {
+ll nCr(ll n, ll r) {
   if (r > n) {
     return 0;
   }
@@ -27,8 +27,8 @@ ll nCr(int n, int r) {
     r = n - r;
   }
 
-  ll result = (ll)n;
-  for (int i = 2; i <= r; i++) {
+  ll result = n;
+  for (ll i = 2; i <= r; i++) {
     result *= (n - i + 1);
     result /= i;
   }
@@ -36,7 +36,7 @@ ll nCr(int n, int r) {
 }
 
 // 重複組み合わせを求める
-ll nHr(int n, int r) { return nCr(n + r - 1, r); }
+ll nHr(ll n, ll r) { return nCr(n + r - 1, r); }
 
 int main() {
   cin.tie(0);
