@@ -1,4 +1,6 @@
-public class Main {
+package p12;
+
+public class Main2 {
     public static void main(String[] args) {
         System.out.println("test");
     }
