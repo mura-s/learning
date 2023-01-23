@@ -15,8 +15,5 @@ public class Main {
         var b1 = new BigDecimal("579");
         var b2 = new BigDecimal("0.05");
         System.out.println(b1.multiply(b2));
-
-        var s1 = "hoge";
-        System.out.println(s1);
     }
 }
