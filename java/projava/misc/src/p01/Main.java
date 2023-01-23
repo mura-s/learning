@@ -17,8 +17,6 @@ public class Main {
         System.out.println(b1.multiply(b2));
 
         var s1 = "hoge";
-        var s2 = s1;
-        s2 = "hoge2";
         System.out.println(s1);
     }
 }
