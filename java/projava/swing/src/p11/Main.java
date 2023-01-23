@@ -7,6 +7,6 @@ public class Main {
         var f = new JFrame("test");
         f.setVisible(true);
         f.setSize(600, 400);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }
