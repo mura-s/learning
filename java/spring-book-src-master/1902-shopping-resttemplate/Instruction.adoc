@@ -1,0 +1,11 @@
+== ハンズオン
+=== 概要
+RestTemplateを使用して、REST APIを呼び出します。
+
+=== 手順
+. ProductMaintenanceRestControllerクラスの中身を確認しましょう。どのようなREST APIが提供されるか分かりますか？ある程度分かったら、ShoppingApplicationクラスを実行してWebサービスを起動しましょう。
+
+. src/test/java配下のRestClientTestクラスのtestメソッドの中で、REST APIを呼び出す処理を記述して、商品の登録、参照、更新、削除を行ってください。
+
+=== オプション
+. 商品を削除したときのレスポンスのステータスコードを、コンソール画面に表示してみましょう。

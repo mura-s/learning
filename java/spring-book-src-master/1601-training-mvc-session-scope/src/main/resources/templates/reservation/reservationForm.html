@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>予約フォーム</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>予約フォーム</h1>
+<form th:action="@{/reservation/validate-input}" method="post" th:object="${reservationInput}">
+  <table>
+    <tr>
+      <th>お名前</th>
+      <td><input type="text" th:field="*{name}"/>
+        <div th:errors="*{name}"></div>
+      </td>
+    </tr>
+    <tr>
+      <th>電話番号</th>
+      <td><input type="text" th:field="*{phone}"/>
+        <div th:errors="*{phone}"></div>
+      </td>
+    </tr>
+    <tr>
+      <th>メールアドレス</th>
+      <td><input type="text" th:field="*{emailAddress}"/>
+        <div th:errors="*{emailAddress}"></div>
+      </td>
+    </tr>
+    <tr>
+      <th>受講者のタイプ</th>
+      <td>
+        <select th:field="*{studentTypeCode}">
+          <option
+                  th:each="type : ${studentTypeList}"
+                  th:value="${type.code}"
+                  th:text="${type.name}"
+          />
+        </select>
+      </td>
+    </tr>
+  </table>
+  <input type="hidden" th:field="*{trainingId}"/>
+  <input type="submit" value="予約内容を確認"/>
+</form>
+<a th:href="@{/training/display-details(trainingId=${reservationInput.trainingId})}">研修詳細に戻る</a>
+</body>
+</html>

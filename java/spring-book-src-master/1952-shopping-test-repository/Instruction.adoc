@@ -1,0 +1,17 @@
+== ハンズオン
+=== 概要
+Repositoryのユニットテストを作成します。
+
+=== 手順
+. JdbcProductRepositoryクラスのテストクラスを作成しましょう。テスト用のSQLファイルは、src/test/resources配下のJdbcProductRepositoryTest.sqlに用意されています。JdbcProductRepositoryクラスの以下のメソッドをテストしてください。
+.. selectAllメソッド
+... 最低限、取得件数が期待通りになっていることを確認しましょう。
+.. selectByIdメソッド
+... 適当なIDで検索し、Productオブジェクトの中身が期待通りか確認しましょう。
+.. updateメソッド
+... 適当なIDのデータを更新し、t_productテーブルのレコードが期待通りに変更されたことを確認しましょう。
+
+
+=== オプション
+. JdbcOrderRepositoryクラスのテストクラスを作成しましょう。
+

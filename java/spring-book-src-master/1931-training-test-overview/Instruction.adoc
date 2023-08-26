@@ -1,0 +1,17 @@
+== ハンズオン
+=== 概要
+Springのテストサポート機能を使用したテストクラスを実行してみます。
+
+=== 手順
+. src/test/java 配下のTrainingServiceTest.javaの内容を確認し、実行してみてください。以下の問いかけに答えることができますか？(※データベースのデータは、Spring Bootにより「0001-training-common」プロジェクトのsrc/main/resources/data.sqlを使用して登録されます)
+.. @SpringBootTestを付けることで、何が起こるのでしょうか？
+.. @Autowiredは、何をしているのでしょうか？
+.. DIコンテナに読み込まれるJavaConfigクラスはどれでしょうか？
+
+
+. テスト実行時にだけ、トランザクション制御のログをコンソールに出力するようにしてください。トランザクション制御のログに出力するためには、Spring Bootが読み込むプロパティファイルに以下を記述します。
++
+----
+logging.level.org.springframework.jdbc.support.JdbcTransactionManager=DEBUG
+----
+

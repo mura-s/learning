@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>予約確認</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>予約確認</h1>
+<form th:action="@{/reservation/reserve}" , method="post" th:object="${reservationInput}">
+  <table>
+    <tr>
+      <th>お名前</th>
+      <td><span th:text="*{name}"></span></td>
+    </tr>
+    <tr>
+      <th>電話番号</th>
+      <td><span th:text="*{phone}"></span></td>
+    </tr>
+    <tr>
+      <th>メールアドレス</th>
+      <td><span th:text="*{emailAddress}"></span></td>
+    </tr>
+    <tr>
+      <th>受講者のタイプ</th>
+      <td><span th:text="${studentType.name}"></span></td>
+    </tr>
+  </table>
+  <div>以下の研修を予約します。</div>
+  <table>
+    <tr>
+      <th>研修タイトル</th>
+      <td><span th:text="${training.title}"></span></td>
+    </tr>
+    <tr>
+      <th>開始日</th>
+      <td><span th:text="${training.startDateTime}"></span></td>
+    </tr>
+    <tr>
+      <th>終了日</th>
+      <td><span th:text="${training.endDateTime}"></span></td>
+    </tr>
+  </table>
+  <input name="reserve" type="submit" value="予約を確定"/>
+  <input name="correct" type="submit" value="予約内容を変更"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,28 @@
+:imagesdir: images
+
+== ハンズオン
+=== 概要
+Spring Bootのオートコンフィグレーションを使うことで、コンフィグレーションの手間が大きく減ることを確認します。
+
+=== 手順
+. pom.xmlの中身をのぞいてみましょう。<dependencies>タグの中に、「spring-boot-starter-jdbc」というアーティファクトが指定されています。このアーティファクトを指定するだけで、Springのライブラリや、データベースアクセス、トランザクション制御のためのライブラリが利用できるようになります。
+
+. TrainingApplicationクラスの中身をのぞいてみましょう。Spring Bootのオートコンフィグレーションを使用していないため、DataSource、JdbcTemplate、PlatformTransactionManagerのBean定義を行っています。
+
+. TrainingApplicationクラスを、オートコンフィグレーションを使用する形に修正しましょう。DIコンテナの生成は、AnnotationConfigApplicationContextクラスを使用するのではなく、SpringApplicationクラスのrunメソッドを使用します。DataSource、JdbcTemplate、TransactionManagerのBean定義は不要になるので削除しましょう。Spring Bootは、クラスパス直下の「schema.sql」「data.sql」ファイルを自動的に読込みますので、明示的な指定は不要です。
+
+. TrainingApplicationクラスを実行します。上手く動けば、コンソール画面にトランザクション制御しているログが出力されます。
+
+. src/main/resourcesフォルダの下にapplication.propertiesファイルを作成して、以下の記述をしてみましょう。
++
+----
+logging.level.org.springframework.jdbc.core.JdbcTemplate=DEBUG
+----
++
+もう一度TrainingApplicationクラスを実行すると、実行されたSQLがコンソールに出力されます。Spring Bootがログ回りの設定をカスタマイズし、JdbcTemplateクラスのロガーのログレベルを変更できたことが分かります。
+なお、ロガーの名前は以下の赤枠の部分で確認できます。
+
+image::log-sample.png[]
+
+
+

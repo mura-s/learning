@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>研修登録確認</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>研修登録確認</h1>
+<form th:action="@{/admin/training/register}" method="post" th:object="${trainingAdminInput}">
+  <table>
+    <tr>
+      <th>研修ID</th>
+      <td>
+        <span th:text="*{id}"></span>
+      </td>
+    </tr>
+    <tr>
+      <th>研修タイトル</th>
+      <td>
+        <span th:text="*{title}"></span>
+      </td>
+    </tr>
+    <tr>
+      <th>開始日時</th>
+      <td>
+        <span th:text="*{#temporals.format(startDateTime, 'yyyy/MM/dd HH:mm')}"></span>
+      </td>
+    </tr>
+    <tr>
+      <th>終了日時</th>
+      <td>
+        <span th:text="*{#temporals.format(endDateTime, 'yyyy/MM/dd HH:mm')}"></span>
+      </td>
+    </tr>
+    <tr>
+      <th>予約数</th>
+      <td>
+        <span th:text="*{reserved}"></span>
+      </td>
+    </tr>
+    <tr>
+      <th>定員</th>
+      <td>
+        <span th:text="*{capacity}"></span>
+      </td>
+    </tr>
+  </table>
+
+  <input type="hidden" th:field="*{id}"/>
+  <input type="hidden" th:field="*{title}"/>
+  <input type="hidden" th:field="*{startDateTime}"/>
+  <input type="hidden" th:field="*{endDateTime}"/>
+  <input type="hidden" th:field="*{reserved}"/>
+  <input type="hidden" th:field="*{capacity}"/>
+
+  <input type="submit" name="correct" value="戻る"/>
+  <input type="submit" name="register" value="登録"/>
+</form>
+</body>
+</html>

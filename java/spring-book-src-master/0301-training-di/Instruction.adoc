@@ -1,0 +1,11 @@
+== ハンズオン
+=== 概要
+DIを適用しているプログラムがどのようなものかを確認します。
+DIを適用することで、依存オブジェクトの具象クラスを効率的に切り替えれることを確認します。
+
+=== 手順
+. TrainingApplicationクラスのmainメソッドを実行してみましょう。Repositoryの具象クラスは、どれが使用されたでしょうか？
+
+. TrainingServiceImplTest(src/test/java配下)クラスのテストを実行してみましょう。TrainingServiceImplオブジェクトが用意できてないため、NullPointerExceptionが発生します。
+
+. TrainingServiceImplTestクラスのテストメソッドの中でTrainingServiceImplオブジェクトを生成しましょう。TrainingServiceImplオブジェクトにインジェクションする依存オブジェクトの具象クラスは、MockTrainingRepositoryクラスを使用してください。TrainingServiceImplオブジェクトが生成できたら、再度TrainingServiceImplTestのテストを実行します。テストがパスするはずです。

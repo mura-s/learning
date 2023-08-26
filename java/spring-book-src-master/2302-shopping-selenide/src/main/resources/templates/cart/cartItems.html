@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>ショッピングカート</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <h1>ショッピングカート</h1>
+        <table>
+            <tr>
+                <th>商品名</th>
+                <th>価格</th>
+                <th>数量</th>
+            </tr>
+            <tr th:each="item:${cartInput.cartItemInputs}">
+                <td><span th:text="${item.productName}"></span></td>
+                <td><span th:text="${item.productPrice}"></span>円</td>
+                <td><span th:text="${item.quantity}"></span></td>
+                <td>
+                    <form th:action="@{/cart/remove-item}" method="post">
+                        <input type="hidden" name="cartItemId" th:value="${item.id}"/>
+                        <input type="submit" value="カートから削除"/>
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <div>合計金額:<span th:text="${cartInput.totalAmount}"></span>円</div>
+        <div>請求金額:<span th:text="${cartInput.billingAmount}"></span>円(税込)</div>
+        <form th:if="${cartInput.cartItemInputs.size() > 0}" th:action="@{/order/display-form}" method="get">
+            <input type="submit" value="注文する"/>
+        </form>
+        <a th:href="@{/catalog/display-list}">商品一覧に戻る</a>
+    </body>
+</html>

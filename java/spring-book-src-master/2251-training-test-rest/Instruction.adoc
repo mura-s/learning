@@ -1,0 +1,14 @@
+== ハンズオン
+=== 概要
+REST APIを提供するテストクラスを作成します。Controllerのユニットテスト、およびインテグレーションテストを作成します。
+
+=== 手順
+. TrainingAdminRestControllerTestクラスを実行しましょう。テストがパスするはずです。何をテストしているか分かりますか？
+
+. TrainingAdminRestControllerクラスのgetTrainings(1件ではなく、複数件のデータを取得)メソッドをテストするテストメソッドを作成しましょう。
+
+. TrainingAdminRestControllerIntegrationTestMockMvcテストを実行しましょう。テストがパスするはずです。テストメソッドを追加して、IDを指定して研修データ1件を取得するAPIをテストしましょう。
+
+. TrainingAdminRestControllerIntegrationTestApServerテストを実行しましょう。テストがパスするはずです。テストメソッドを追加して、IDを指定して研修データ1件を取得するAPIをテストしましょう。
+
+. それぞれのテストクラスは、Controllerの処理を起点にしてテストしていますが、どのような違いがありますか？

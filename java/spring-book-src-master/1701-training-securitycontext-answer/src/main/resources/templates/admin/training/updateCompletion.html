@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>研修更新完了</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <h1>研修更新完了</h1>
+        <div th:if="${trainingId != null}">更新した研修ID「<span th:text="${trainingId}"></span>」</div>
+        <a th:href="@{/admin/training/display-list}">研修一覧に戻る</a>
+    </body>
+</html>

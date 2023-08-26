@@ -1,0 +1,36 @@
+== ハンズオン
+=== 概要
+更新系のREST APIを作成し、挙動を確認します。
+
+=== 手順
+. ProductMaintenanceRestControllerクラスの中身を見てみましょう。参照系のREST APIが提供されていますが、更新系は提供されていません。
+
+. 更新系の、登録、更新、削除のREST APIを追加してください。登録・更新用のデータは、jsonフォルダの中に用意しています。Curlコマンドで動作確認する際は、コマンドプロンプトを開いて「1802-shopping-rest-update」に移動しましょう。以下に、Curlコマンドのサンプルを示しますので、必要に応じて利用してください。
+
+.. IDを指定してデータを参照
++
+----
+curl -v -H "Accept: application/json" http://localhost:8080/api/products/p01
+----
+
+.. PUTでデータを更新
++
+----
+curl -v -X PUT -H "Content-Type: application/json" http://localhost:8080/api/products/p01 -d @json/put-data.json
+----
+
+.. POSTでデータを登録
++
+----
+curl -v -X POST -H "Content-Type: application/json" http://localhost:8080/api/products -d @json/post-data.json
+----
+
+.. DELETEでデータを削除
++
+----
+curl -v -X DELETE http://localhost:8080/api/products/p08
+----
+
+=== オプション
+IDを指定してデータを取得しようとして、データが見つからなかった場合に、ステータスコード404を返すようにしましょう。
+

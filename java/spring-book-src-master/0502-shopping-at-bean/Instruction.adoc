@@ -1,0 +1,23 @@
+== ハンズオン
+
+=== 概要
+ライブラリのクラスを@BeanメソッドでBean定義します。
+
+=== 手順
+. ShoppingApplicationクラスのmainメソッドを実行してみましょう。「No qualifying bean of type 'javax.sql.DataSource' available」というエラーが発生します。原因は何でしょうか？
+
+. ShoppingApplicationクラスに以下のソースコードを追加してもう一度実行してみましょう(ソースコードを張り付けた後、統合開発環境の機能を使ってimport文を補完してください)。上手く動くはずです。何が起こったか説明できますか？
++
+----
+    @Bean
+    public DataSource dataSource() {
+        EmbeddedDatabase dataSource = new EmbeddedDatabaseBuilder()
+                .addScripts("schema.sql", "data.sql")
+                .setType(EmbeddedDatabaseType.H2).build();
+        return dataSource;
+    }
+----
+
+=== オプション
+. ServiceとRepositoryのBean定義の手段を、@Beanメソッドに変更してみましょう。
+

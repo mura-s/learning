@@ -1,0 +1,22 @@
+== ハンズオン
+
+=== 概要
+プロファイルを使ってコンフィグレーションを切り替えます。
+
+=== 手順
+. TrainingApplicationクラスのmainメソッドを実行してみましょう。「expected single matching bean but found 2」というエラーメッセージが表示されます。これは、TrainingServiceImplオブジェクトがインジェクションしようとしているTrainingRepository型のオブジェクトが、DIコンテナに2つ存在するからです(JdbcTrainingRepositoryオブジェクトとExternalTrainingRepositoryオブジェクト)。
+
+. JdbcTrainingRepositoryクラスとExternalTrainingRepositoryクラスを、別々のプロファイルでグルーピングしましょう。プロファイル名は任意です。
+
+. プロファイルでグルーピングしたら、いずれかのプロファイル名を有効にします。有効なプロファイルを指定するには、DIコンテナの生成の前に、以下の処理を加えます。
++
+----
+System.setProperty("spring.profiles.active", "プロファイル名");
+----
++
+「System.setProperty(...」は、Javaのシステムプロパティを指定する記述です。本来はJavaコマンドのオプションでシステムプロパティを指定したほうがよいですが、今回は簡単のため、プログラムの中で指定する形にします。
+指定したプロファイル名に応じて、JdbcTrainingRepositoryオブジェクトとExternalTrainingRepositoryオブジェクトの、いずれかが使用されて動作するはずです。
+
+
+
+

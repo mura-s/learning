@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>商品更新</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <h1>商品更新</h1>
+        <form th:action="@{/maintenance/product/validate-update-input}" method="post" th:object="${productMaintenanceInput}">
+            <table>
+                <tr>
+                    <th>商品ID</th>
+                    <td>
+                        <span th:text="*{id}"></span>
+                        <input type="hidden" th:field="*{id}" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>商品名</th>
+                    <td>
+                        <input type="text" th:field="*{name}" />
+                        <div th:errors="*{name}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>価格</th>
+                    <td>
+                        <input type="text" th:field="*{price}">円
+                        <div th:errors="*{price}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>在庫数</th>
+                    <td>
+                        <input type="text" th:field="*{stock}" />
+                        <div th:errors="*{stock}"></div>
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <input type="submit" value="更新"/>
+            </div>
+            <a th:href="@{/maintenance/product/display-list}">商品一覧に戻る</a>
+        </form>
+    </body>
+</html>

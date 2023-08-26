@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>研修詳細</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>研修詳細</h1>
+<table>
+  <tr>
+    <th>研修タイトル</th>
+    <td><span th:text="${training.title}"></span></td>
+  </tr>
+  <tr>
+    <th>開始日時</th>
+    <td><span th:text="${#temporals.format(training.startDateTime, 'yyyy/MM/dd HH:mm')}">300</span>
+    </td>
+  </tr>
+  <tr>
+    <th>終了日時</th>
+    <td><span th:text="${#temporals.format(training.endDateTime, 'yyyy/MM/dd HH:mm')}">10</span>
+    </td>
+  </tr>
+  <tr>
+    <th>予約数</th>
+    <td><span th:text="${training.reserved}"></span></td>
+  </tr>
+  <tr>
+    <th>定員</th>
+    <td><span th:text="${training.capacity}"></span></td>
+  </tr>
+</table>
+<form th:action="@{/reservation/display-form}" method="get">
+  <input type="hidden" name="trainingId" th:value="${training.id}"/>
+  <input type="submit" value="受講を予約する"/>
+</form>
+<a th:href="@{/training/display-list}">研修一覧に戻る</a>
+</body>
+</html>

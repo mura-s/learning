@@ -1,0 +1,13 @@
+== ハンズオン
+=== 概要
+Controller・Service・Repositoryのインテグレーションテストを作成します。
+
+=== 手順
+. CatalogControllerIntegrationTestクラスの中身を見てみましょう。「/catalog/display-list」のリクエストに対しては、テストメソッドが作成済みです。「/catalog/display-details」のリクエストに対するテストメソッドを追加しましょう。
+
+. OrderControllerIntegrationTestクラスの中身を見てみましょう。test_orderメソッドは、OrderControllerクラスのorderメソッドをテストするためのテストメソッドです。セッションスコープに格納するOrderSessionオブジェクトは用意できていますが、MockMvcオブジェクトのperformメソッドの呼び出しや、アサーションが記述されていません。test_orderメソッドを完成させましょう。アサーションでは以下を確認しましょう。
+.. 発行された注文IDを使って注文データを検索し、取得した注文データの顧客名や住所が期待通りになっている
+
+=== オプション
+. 在庫が足りないときに、期待する画面が表示されることを確認するテストメソッドを追加しましょう。
+

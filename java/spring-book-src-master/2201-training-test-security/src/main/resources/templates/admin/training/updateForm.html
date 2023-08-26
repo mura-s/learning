@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>研修更新</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <h1>研修更新</h1>
+        <form th:action="@{/admin/training/validate-update-input}" method="post" th:object="${trainingAdminInput}">
+            <table>
+                <tr>
+                    <th>研修ID</th>
+                    <td>
+                        <span th:text="*{id}"></span>
+                        <input type="hidden" th:field="*{id}" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>研修タイトル</th>
+                    <td>
+                        <input type="text" th:field="*{title}" />
+                        <div th:errors="*{title}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>開始日時</th>
+                    <td>
+                        <input type="text" th:field="*{startDateTime}">
+                        <div th:errors="*{startDateTime}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>終了日時</th>
+                    <td>
+                        <input type="text" th:field="*{endDateTime}" />
+                        <div th:errors="*{endDateTime}"></div>
+                    </td>
+                </tr>
+              <tr>
+                <th>予約数</th>
+                <td>
+                  <input type="text" th:field="*{reserved}" />
+                  <div th:errors="*{reserved}"></div>
+                </td>
+              </tr>
+              <tr>
+                <th>定員</th>
+                <td>
+                  <input type="text" th:field="*{capacity}" />
+                  <div th:errors="*{capacity}"></div>
+                </td>
+              </tr>
+            </table>
+            <div sec:authorize="hasRole('ADMIN')">
+              <input type="submit" name="update" value="更新"/>
+              <input type="submit" name="delete" value="削除"/>
+            </div>
+            <a th:href="@{/admin/training/display-list}">研修一覧に戻る</a>
+        </form>
+    </body>
+</html>

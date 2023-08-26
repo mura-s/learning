@@ -1,0 +1,13 @@
+== ハンズオン
+=== 概要
+RowMapperインタフェースを使用して、１対多のJOINの取得結果をオブジェクトに変換します。
+
+=== 手順
+. JdbcOrderItemRepositoryクラスの中身を見てみましょう。selectByIdメソッドが実装されてはいますが、JOINしたレコードのデータが上手くオブジェクト(OrderItemオブジェクトがProductオブジェクトを保持した状態)にマッピングされるでしょうか？
+
+. 上手くオブジェクトにマッピングされるように修正しましょう。RowMapperインタフェースを実装したクラスの作成が必要です。修正出来たら、TrainingApplicationクラスのmainメソッドの中で、selectByIdメソッドを呼び出してオブジェクトの中身を確認しましょう。
+
+=== オプション
+
+. JdbcOrderRepositoryクラスのselectByIdメソッドで、１対多の関係のオブジェクト(Orderオブジェクトが複数のOrderItemオブジェクトを保持した状態)にマッピングするように修正しましょう。
+.. 【補足】PaymentMethodはenum型ですが、JDBCはenum型の変換に対応していません。ですので、「rs.getObject("カラム名", PaymentMethod.class)」という記述ができません。代わりに、「PaymentMethod.valueOf(rs.getString("カラム名"))」と記述すればよいです。

@@ -1,0 +1,18 @@
+== ハンズオン
+
+=== 概要
+既存のプログラムにステレオタイプアノテーションを記述して、Bean定義を行います。合わせて、インジェクションするためのアノテーションも確認します。
+
+=== 手順
+. ShoppingApplicationクラスのmainメソッドを実行してみましょう。「No qualifying bean of type 'com.example.shopping.service.OrderService' available」というエラーが出力されるはずです。これは、mainメソッドの中でgetBeanメソッドを呼び出した際に、指定したOrderService型に該当するBeanが存在しないためDIコンテナが例外をスローしたためです。また、現在はOrderService型のBean以外にも、OrderRepository型のBean、OrderItemRepository型のBean、ProductRepository型のBeanも存在していない状態です。
+
+. OrderService型のBean、OrderRepository型のBean、OrderItemRepository型のBean、ProductRepository型のBeanをDIコンテナに登録するように修正してください。
+.. ヒントは、ステレオタイプアノテーションとコンポーネントスキャンです。
+
+. 再度ShoppingApplicationクラスのmainメソッドを実行し、「注文確定処理が完了しました。・・・」という文言がコンソール画面に出力されればOKです。
+
+=== オプション
+
+. Repository型のオブジェクトのインジェクションの方法を、Setterジェクションやフィールドインジェクションに変えてみましょう。
+
+. 記載したアノテーションを部分的にわざと削除して、実行時にどのようなエラーがでるか試してみましょう。

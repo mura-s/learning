@@ -1,0 +1,17 @@
+== ハンズオン
+=== 概要
+Serviceのユニットテストを作成します。
+
+=== 手順
+. ProductMaintenanceServiceImplTestクラスの中身を見てみましょう。updateメソッドのテストメソッドが存在します。
+. 以下のメソッドのテストメソッドを作成しましょう。
+.. findAllメソッド
+... 最低限、取得件数が期待通りになっていることを確認しましょう。
+.. findByIdメソッド
+... 適当なIDで検索し、Productオブジェクトの中身が期待通りか確認しましょう。
+
+. updateメソッドのテストメソッドでは、MockのProductRepositoryのupdateメソッドが呼ばれたことは確認できていますが、メソッドの引数で渡されたProductオブジェクトのフィールドの値が正しいか否かは確認できていません。MockitoのArgumentCaptorクラスを使って確認しましょう。
+
+=== オプション
+. OrderServiceImplTestのtest_placeOrderメソッドでも、Mockのメソッドの引数で渡されたオブジェクトに対して、フィールドの値が正しいかを確認できていません。ArgumentCaptorクラスを使って確認しましょう。なお、Mockの同じメソッドが複数回呼び出された場合、ArgumentCaptorのgetAllValuesメソッドを使って、呼び出された数分の引数のオブジェクトをList型のオブジェクトで取得できます。
+

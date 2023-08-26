@@ -1,0 +1,11 @@
+== ハンズオン
+=== 概要
+Springを使用して簡単にトランザクション制御ができることを確認します。
+
+=== 手順
+. TrainingApplicationクラスを実行してみましょう。mainメソッドの最後の方で業務ロジックのreserveメソッドが呼び出されています。コンソール画面をみると、特にトランザクション制御されているようなログは出力されていません。
+
+. ReservationServiceImplクラスに、トランザクション制御するためのアノテーションをつけて、もう一度TrainingApplicationクラスを実行してみましょう。トランザクション制御の開始を意味する「Creating new transaction with name・・・ 」や、トランザクションのコミットを意味する「Committing JDBC transaction on Connection・・・」というログが出力されるはずです。
+
+. デバッガのブレークポイントを使用して、mainメソッドの途中で処理を止めて、「reservationService」変数の具象クラスの名前を調べてみましょう(変数の上にマウスカーソルを合わせると表示されます)。「$Proxy..」という名前になってれば、Springが自動生成したProxyになってる証拠です。
+

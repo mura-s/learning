@@ -1,0 +1,16 @@
+== ハンズオン
+
+=== 概要
+JdbcTemplateクラスを使用していないプログラムを、JdbcTemplateクラスを使うように修正します。
+
+=== 手順
+. TrainingApplicationクラスを実行してみましょう。「No qualifying bean of type 'org.springframework.jdbc.core.JdbcTemplate' available」というエラーが発生します。何が原因でしょうか？
+
+. 必要な対応を行って、もう一度TrainingApplicationクラスを実行してみましょう。上手く動くはずです。
+
+. JdbcOrderItemRepositoryクラスの中を確認してください。JdbcTemplateクラスを使用していません。JdbcTemplateクラスを使用するように修正して、TrainingApplicationクラスを実行し、上手く動くようにしましょう。
+
+. JdbcProductRepositoryクラスもJdbcTemplateクラスを使用していません。JdbcTemplateクラスを使用するように修正して、TrainingApplicationクラスを実行し、上手く動くようにしましょう。
+
+=== オプション
+. JdbcOrderRepositoryクラスに、IDで検索してOrderオブジェクトを取得するメソッドを追加しましょう。追加できたら、TrainingApplicationクラスのmainメソッド内で注文確定が完了した後に、JdbcOrderRepositoryクラスのBeanをDIコンテナから取得して、追加したメソッドを使って登録された注文データが取得できるか確認しましょう。

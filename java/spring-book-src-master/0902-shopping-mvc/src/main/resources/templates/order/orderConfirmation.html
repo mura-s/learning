@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>注文確認</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>注文確認</h1>
+<form th:action="@{/order/place-order}" , method="post" th:object="${orderInput}">
+  <table>
+    <tr>
+      <th>お名前</th>
+      <td><span th:text="*{name}"></span></td>
+    </tr>
+    <tr>
+      <th>住所</th>
+      <td><span th:text="*{address}"></span></td>
+    </tr>
+    <tr>
+      <th>電話番号</th>
+      <td><span th:text="*{phone}"></span></td>
+    </tr>
+    <tr>
+      <th>メールアドレス</th>
+      <td><span th:text="*{emailAddress}"></span></td>
+    </tr>
+    <tr>
+      <th>お支払方法</th>
+      <td>
+        <span th:if="*{paymentMethod != null && paymentMethod.toString() == 'BANK'}">銀行振込</span>
+        <span th:if="*{paymentMethod != null && paymentMethod.toString() == 'CONVENIENCE_STORE'}">コンビニ払い</span>
+      </td>
+    </tr>
+  </table>
+  <div>以下を注文します。</div>
+  <table>
+    <tr>
+      <th>商品名</th>
+      <th>価格</th>
+      <th>数量</th>
+    </tr>
+    <tr th:each="item:${cartInput.cartItemInputs}">
+      <td th:text="${item.productName}"></td>
+      <td><span th:text="${item.productPrice}"></span>円</td>
+      <td th:text="${item.quantity}"></td>
+    </tr>
+  </table>
+  <div>合計金額:<span th:text="${cartInput.totalAmount}"></span>円</div>
+  <div>請求金額:<span th:text="${cartInput.billingAmount}"></span>円(税込)</div>
+
+  <input type="hidden" th:field="*{name}"/>
+  <input type="hidden" th:field="*{address}"/>
+  <input type="hidden" th:field="*{phone}"/>
+  <input type="hidden" th:field="*{emailAddress}"/>
+  <input type="hidden" th:field="*{paymentMethod}"/>
+
+  <input type="submit" value="注文内容を変更"/>
+</form>
+</body>
+</html>
