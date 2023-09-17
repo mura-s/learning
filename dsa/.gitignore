@@ -1,0 +1,16 @@
+.vscode/ipch/
+
+# go/cpp
+main
+
+# cpp
+main.o
+main.dSYM
+
+# java
+*.class
+
+# py
+__pycache__
+.pytest_cache
+.venv
