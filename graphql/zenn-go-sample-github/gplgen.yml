@@ -1,6 +1,6 @@
 # 自動生成コードの元となるGraphQLスキーマがどこに配置してあるか
 schema:
-  - ./*.graphql
+  - ./*.graphqls
 
 # 自動生成されるgeneated.goの置き場所
 exec:
