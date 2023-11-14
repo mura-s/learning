@@ -2,6 +2,11 @@
 
 package model
 
+import (
+	"net/url"
+	"time"
+)
+
 type Node interface {
 	IsNode()
 	GetID() string
@@ -22,7 +27,7 @@ type AddProjectV2ItemByIDPayload struct {
 
 type Issue struct {
 	ID           string                   `json:"id"`
-	URL          string                   `json:"url"`
+	URL          url.URL                  `json:"url"`
 	Title        string                   `json:"title"`
 	Closed       bool                     `json:"closed"`
 	Number       int                      `json:"number"`
@@ -58,7 +63,7 @@ type PageInfo struct {
 type ProjectV2 struct {
 	ID     string                   `json:"id"`
 	Title  string                   `json:"title"`
-	URL    string                   `json:"url"`
+	URL    url.URL                  `json:"url"`
 	Number int                      `json:"number"`
 	Items  *ProjectV2ItemConnection `json:"items"`
 	Owner  *User                    `json:"owner"`
@@ -105,7 +110,7 @@ type PullRequest struct {
 	BaseRefName  string                   `json:"baseRefName"`
 	Closed       bool                     `json:"closed"`
 	HeadRefName  string                   `json:"headRefName"`
-	URL          string                   `json:"url"`
+	URL          url.URL                  `json:"url"`
 	Number       int                      `json:"number"`
 	Repository   *Repository              `json:"repository"`
 	ProjectItems *ProjectV2ItemConnection `json:"projectItems"`
@@ -132,7 +137,7 @@ type Repository struct {
 	ID           string                 `json:"id"`
 	Owner        *User                  `json:"owner"`
 	Name         string                 `json:"name"`
-	CreatedAt    string                 `json:"createdAt"`
+	CreatedAt    time.Time              `json:"createdAt"`
 	Issue        *Issue                 `json:"issue,omitempty"`
 	Issues       *IssueConnection       `json:"issues"`
 	PullRequest  *PullRequest           `json:"pullRequest,omitempty"`
