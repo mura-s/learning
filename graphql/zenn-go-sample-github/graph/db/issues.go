@@ -28,6 +28,7 @@ type Issue struct {
 	Title      string `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Closed     int64  `boil:"closed" json:"closed" toml:"closed" yaml:"closed"`
 	Number     int64  `boil:"number" json:"number" toml:"number" yaml:"number"`
+	Author     string `boil:"author" json:"author" toml:"author" yaml:"author"`
 	Repository string `boil:"repository" json:"repository" toml:"repository" yaml:"repository"`
 
 	R *issueR `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -40,6 +41,7 @@ var IssueColumns = struct {
 	Title      string
 	Closed     string
 	Number     string
+	Author     string
 	Repository string
 }{
 	ID:         "id",
@@ -47,6 +49,7 @@ var IssueColumns = struct {
 	Title:      "title",
 	Closed:     "closed",
 	Number:     "number",
+	Author:     "author",
 	Repository: "repository",
 }
 
@@ -56,6 +59,7 @@ var IssueTableColumns = struct {
 	Title      string
 	Closed     string
 	Number     string
+	Author     string
 	Repository string
 }{
 	ID:         "issues.id",
@@ -63,6 +67,7 @@ var IssueTableColumns = struct {
 	Title:      "issues.title",
 	Closed:     "issues.closed",
 	Number:     "issues.number",
+	Author:     "issues.author",
 	Repository: "issues.repository",
 }
 
@@ -122,6 +127,7 @@ var IssueWhere = struct {
 	Title      whereHelperstring
 	Closed     whereHelperint64
 	Number     whereHelperint64
+	Author     whereHelperstring
 	Repository whereHelperstring
 }{
 	ID:         whereHelperstring{field: "\"issues\".\"id\""},
@@ -129,20 +135,24 @@ var IssueWhere = struct {
 	Title:      whereHelperstring{field: "\"issues\".\"title\""},
 	Closed:     whereHelperint64{field: "\"issues\".\"closed\""},
 	Number:     whereHelperint64{field: "\"issues\".\"number\""},
+	Author:     whereHelperstring{field: "\"issues\".\"author\""},
 	Repository: whereHelperstring{field: "\"issues\".\"repository\""},
 }
 
 // IssueRels is where relationship names are stored.
 var IssueRels = struct {
+	AuthorUser      string
 	IssueRepository string
 	Projectcards    string
 }{
+	AuthorUser:      "AuthorUser",
 	IssueRepository: "IssueRepository",
 	Projectcards:    "Projectcards",
 }
 
 // issueR is where relationships are stored.
 type issueR struct {
+	AuthorUser      *User            `boil:"AuthorUser" json:"AuthorUser" toml:"AuthorUser" yaml:"AuthorUser"`
 	IssueRepository *Repository      `boil:"IssueRepository" json:"IssueRepository" toml:"IssueRepository" yaml:"IssueRepository"`
 	Projectcards    ProjectcardSlice `boil:"Projectcards" json:"Projectcards" toml:"Projectcards" yaml:"Projectcards"`
 }
@@ -150,6 +160,13 @@ type issueR struct {
 // NewStruct creates a new relationship struct
 func (*issueR) NewStruct() *issueR {
 	return &issueR{}
+}
+
+func (r *issueR) GetAuthorUser() *User {
+	if r == nil {
+		return nil
+	}
+	return r.AuthorUser
 }
 
 func (r *issueR) GetIssueRepository() *Repository {
@@ -170,8 +187,8 @@ func (r *issueR) GetProjectcards() ProjectcardSlice {
 type issueL struct{}
 
 var (
-	issueAllColumns            = []string{"id", "url", "title", "closed", "number", "repository"}
-	issueColumnsWithoutDefault = []string{"id", "url", "title", "number", "repository"}
+	issueAllColumns            = []string{"id", "url", "title", "closed", "number", "author", "repository"}
+	issueColumnsWithoutDefault = []string{"id", "url", "title", "number", "author", "repository"}
 	issueColumnsWithDefault    = []string{"closed"}
 	issuePrimaryKeyColumns     = []string{"id"}
 	issueGeneratedColumns      = []string{}
@@ -455,6 +472,17 @@ func (q issueQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool
 	return count > 0, nil
 }
 
+// AuthorUser pointed to by the foreign key.
+func (o *Issue) AuthorUser(mods ...qm.QueryMod) userQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("\"id\" = ?", o.Author),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	return Users(queryMods...)
+}
+
 // IssueRepository pointed to by the foreign key.
 func (o *Issue) IssueRepository(mods ...qm.QueryMod) repositoryQuery {
 	queryMods := []qm.QueryMod{
@@ -478,6 +506,126 @@ func (o *Issue) Projectcards(mods ...qm.QueryMod) projectcardQuery {
 	)
 
 	return Projectcards(queryMods...)
+}
+
+// LoadAuthorUser allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (issueL) LoadAuthorUser(ctx context.Context, e boil.ContextExecutor, singular bool, maybeIssue interface{}, mods queries.Applicator) error {
+	var slice []*Issue
+	var object *Issue
+
+	if singular {
+		var ok bool
+		object, ok = maybeIssue.(*Issue)
+		if !ok {
+			object = new(Issue)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeIssue)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeIssue))
+			}
+		}
+	} else {
+		s, ok := maybeIssue.(*[]*Issue)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeIssue)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeIssue))
+			}
+		}
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &issueR{}
+		}
+		args = append(args, object.Author)
+
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &issueR{}
+			}
+
+			for _, a := range args {
+				if a == obj.Author {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.Author)
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(
+		qm.From(`users`),
+		qm.WhereIn(`users.id in ?`, args...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load User")
+	}
+
+	var resultSlice []*User
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice User")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for users")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for users")
+	}
+
+	if len(userAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.AuthorUser = foreign
+		if foreign.R == nil {
+			foreign.R = &userR{}
+		}
+		foreign.R.AuthorIssues = append(foreign.R.AuthorIssues, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.Author == foreign.ID {
+				local.R.AuthorUser = foreign
+				if foreign.R == nil {
+					foreign.R = &userR{}
+				}
+				foreign.R.AuthorIssues = append(foreign.R.AuthorIssues, local)
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 // LoadIssueRepository allows an eager lookup of values, cached into the
@@ -709,6 +857,53 @@ func (issueL) LoadProjectcards(ctx context.Context, e boil.ContextExecutor, sing
 				break
 			}
 		}
+	}
+
+	return nil
+}
+
+// SetAuthorUser of the issue to the related item.
+// Sets o.R.AuthorUser to related.
+// Adds o to related.R.AuthorIssues.
+func (o *Issue) SetAuthorUser(ctx context.Context, exec boil.ContextExecutor, insert bool, related *User) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE \"issues\" SET %s WHERE %s",
+		strmangle.SetParamNames("\"", "\"", 0, []string{"author"}),
+		strmangle.WhereClause("\"", "\"", 0, issuePrimaryKeyColumns),
+	)
+	values := []interface{}{related.ID, o.ID}
+
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, updateQuery)
+		fmt.Fprintln(writer, values)
+	}
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.Author = related.ID
+	if o.R == nil {
+		o.R = &issueR{
+			AuthorUser: related,
+		}
+	} else {
+		o.R.AuthorUser = related
+	}
+
+	if related.R == nil {
+		related.R = &userR{
+			AuthorIssues: IssueSlice{o},
+		}
+	} else {
+		related.R.AuthorIssues = append(related.R.AuthorIssues, o)
 	}
 
 	return nil

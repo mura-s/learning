@@ -10,7 +10,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	_ "github.com/mattn/go-sqlite3"
-
 	"github.com/mura-s/learning/graphql/zenn-go-sample-github/graph"
 	"github.com/mura-s/learning/graphql/zenn-go-sample-github/graph/services"
 	"github.com/mura-s/learning/graphql/zenn-go-sample-github/internal"

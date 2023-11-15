@@ -23,51 +23,58 @@ import (
 
 // Project is an object representing the database table.
 type Project struct {
-	ID    string `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Title string `boil:"title" json:"title" toml:"title" yaml:"title"`
-	URL   string `boil:"url" json:"url" toml:"url" yaml:"url"`
-	Owner string `boil:"owner" json:"owner" toml:"owner" yaml:"owner"`
+	ID     string `boil:"id" json:"id" toml:"id" yaml:"id"`
+	Title  string `boil:"title" json:"title" toml:"title" yaml:"title"`
+	URL    string `boil:"url" json:"url" toml:"url" yaml:"url"`
+	Number int64  `boil:"number" json:"number" toml:"number" yaml:"number"`
+	Owner  string `boil:"owner" json:"owner" toml:"owner" yaml:"owner"`
 
 	R *projectR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L projectL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var ProjectColumns = struct {
-	ID    string
-	Title string
-	URL   string
-	Owner string
+	ID     string
+	Title  string
+	URL    string
+	Number string
+	Owner  string
 }{
-	ID:    "id",
-	Title: "title",
-	URL:   "url",
-	Owner: "owner",
+	ID:     "id",
+	Title:  "title",
+	URL:    "url",
+	Number: "number",
+	Owner:  "owner",
 }
 
 var ProjectTableColumns = struct {
-	ID    string
-	Title string
-	URL   string
-	Owner string
+	ID     string
+	Title  string
+	URL    string
+	Number string
+	Owner  string
 }{
-	ID:    "projects.id",
-	Title: "projects.title",
-	URL:   "projects.url",
-	Owner: "projects.owner",
+	ID:     "projects.id",
+	Title:  "projects.title",
+	URL:    "projects.url",
+	Number: "projects.number",
+	Owner:  "projects.owner",
 }
 
 // Generated where
 
 var ProjectWhere = struct {
-	ID    whereHelperstring
-	Title whereHelperstring
-	URL   whereHelperstring
-	Owner whereHelperstring
+	ID     whereHelperstring
+	Title  whereHelperstring
+	URL    whereHelperstring
+	Number whereHelperint64
+	Owner  whereHelperstring
 }{
-	ID:    whereHelperstring{field: "\"projects\".\"id\""},
-	Title: whereHelperstring{field: "\"projects\".\"title\""},
-	URL:   whereHelperstring{field: "\"projects\".\"url\""},
-	Owner: whereHelperstring{field: "\"projects\".\"owner\""},
+	ID:     whereHelperstring{field: "\"projects\".\"id\""},
+	Title:  whereHelperstring{field: "\"projects\".\"title\""},
+	URL:    whereHelperstring{field: "\"projects\".\"url\""},
+	Number: whereHelperint64{field: "\"projects\".\"number\""},
+	Owner:  whereHelperstring{field: "\"projects\".\"owner\""},
 }
 
 // ProjectRels is where relationship names are stored.
@@ -108,8 +115,8 @@ func (r *projectR) GetProjectcards() ProjectcardSlice {
 type projectL struct{}
 
 var (
-	projectAllColumns            = []string{"id", "title", "url", "owner"}
-	projectColumnsWithoutDefault = []string{"id", "title", "url", "owner"}
+	projectAllColumns            = []string{"id", "title", "url", "number", "owner"}
+	projectColumnsWithoutDefault = []string{"id", "title", "url", "number", "owner"}
 	projectColumnsWithDefault    = []string{}
 	projectPrimaryKeyColumns     = []string{"id"}
 	projectGeneratedColumns      = []string{}

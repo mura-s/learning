@@ -66,15 +66,18 @@ var UserWhere = struct {
 
 // UserRels is where relationship names are stored.
 var UserRels = struct {
+	AuthorIssues      string
 	OwnerProjects     string
 	OwnerRepositories string
 }{
+	AuthorIssues:      "AuthorIssues",
 	OwnerProjects:     "OwnerProjects",
 	OwnerRepositories: "OwnerRepositories",
 }
 
 // userR is where relationships are stored.
 type userR struct {
+	AuthorIssues      IssueSlice      `boil:"AuthorIssues" json:"AuthorIssues" toml:"AuthorIssues" yaml:"AuthorIssues"`
 	OwnerProjects     ProjectSlice    `boil:"OwnerProjects" json:"OwnerProjects" toml:"OwnerProjects" yaml:"OwnerProjects"`
 	OwnerRepositories RepositorySlice `boil:"OwnerRepositories" json:"OwnerRepositories" toml:"OwnerRepositories" yaml:"OwnerRepositories"`
 }
@@ -82,6 +85,13 @@ type userR struct {
 // NewStruct creates a new relationship struct
 func (*userR) NewStruct() *userR {
 	return &userR{}
+}
+
+func (r *userR) GetAuthorIssues() IssueSlice {
+	if r == nil {
+		return nil
+	}
+	return r.AuthorIssues
 }
 
 func (r *userR) GetOwnerProjects() ProjectSlice {
@@ -387,6 +397,20 @@ func (q userQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool,
 	return count > 0, nil
 }
 
+// AuthorIssues retrieves all the issue's Issues with an executor via author column.
+func (o *User) AuthorIssues(mods ...qm.QueryMod) issueQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"issues\".\"author\"=?", o.ID),
+	)
+
+	return Issues(queryMods...)
+}
+
 // OwnerProjects retrieves all the project's Projects with an executor via owner column.
 func (o *User) OwnerProjects(mods ...qm.QueryMod) projectQuery {
 	var queryMods []qm.QueryMod
@@ -413,6 +437,120 @@ func (o *User) OwnerRepositories(mods ...qm.QueryMod) repositoryQuery {
 	)
 
 	return Repositories(queryMods...)
+}
+
+// LoadAuthorIssues allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (userL) LoadAuthorIssues(ctx context.Context, e boil.ContextExecutor, singular bool, maybeUser interface{}, mods queries.Applicator) error {
+	var slice []*User
+	var object *User
+
+	if singular {
+		var ok bool
+		object, ok = maybeUser.(*User)
+		if !ok {
+			object = new(User)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeUser)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeUser))
+			}
+		}
+	} else {
+		s, ok := maybeUser.(*[]*User)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeUser)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeUser))
+			}
+		}
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &userR{}
+		}
+		args = append(args, object.ID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &userR{}
+			}
+
+			for _, a := range args {
+				if a == obj.ID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.ID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(
+		qm.From(`issues`),
+		qm.WhereIn(`issues.author in ?`, args...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load issues")
+	}
+
+	var resultSlice []*Issue
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice issues")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on issues")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for issues")
+	}
+
+	if len(issueAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.AuthorIssues = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &issueR{}
+			}
+			foreign.R.AuthorUser = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ID == foreign.Author {
+				local.R.AuthorIssues = append(local.R.AuthorIssues, foreign)
+				if foreign.R == nil {
+					foreign.R = &issueR{}
+				}
+				foreign.R.AuthorUser = local
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 // LoadOwnerProjects allows an eager lookup of values, cached into the
@@ -640,6 +778,59 @@ func (userL) LoadOwnerRepositories(ctx context.Context, e boil.ContextExecutor, 
 		}
 	}
 
+	return nil
+}
+
+// AddAuthorIssues adds the given related objects to the existing relationships
+// of the user, optionally inserting them as new records.
+// Appends related to o.R.AuthorIssues.
+// Sets related.R.AuthorUser appropriately.
+func (o *User) AddAuthorIssues(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Issue) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.Author = o.ID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"issues\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 0, []string{"author"}),
+				strmangle.WhereClause("\"", "\"", 0, issuePrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.Author = o.ID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &userR{
+			AuthorIssues: related,
+		}
+	} else {
+		o.R.AuthorIssues = append(o.R.AuthorIssues, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &issueR{
+				AuthorUser: o,
+			}
+		} else {
+			rel.R.AuthorUser = o
+		}
+	}
 	return nil
 }
 
