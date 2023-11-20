@@ -13,6 +13,16 @@ type repoService struct {
 	exec boil.ContextExecutor
 }
 
+func (r *repoService) GetRepoByID(ctx context.Context, id string) (*model.Repository, error) {
+	repo, err := db.FindRepository(ctx, r.exec, id,
+		db.RepositoryColumns.ID, db.RepositoryColumns.Name, db.RepositoryColumns.Owner, db.RepositoryColumns.CreatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return convertRepository(repo), nil
+}
+
 func (r *repoService) GetRepoByFullName(ctx context.Context, owner, name string) (*model.Repository, error) {
 	repo, err := db.Repositories(
 		qm.Select(

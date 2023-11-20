@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/99designs/gqlgen v0.17.40
 	github.com/friendsofgo/errors v0.9.2
+	github.com/graph-gophers/dataloader/v7 v7.1.0
 	github.com/mattn/go-sqlite3 v1.14.14
 	github.com/vektah/gqlparser/v2 v2.5.10
 	github.com/volatiletech/null/v8 v8.1.2

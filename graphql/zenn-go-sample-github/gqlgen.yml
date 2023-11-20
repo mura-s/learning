@@ -50,3 +50,7 @@ models:
         resolver: true
       pullRequests:
         resolver: true
+  Issue:
+    fields:
+      author:
+        resolver: true

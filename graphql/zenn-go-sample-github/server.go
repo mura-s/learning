@@ -13,6 +13,7 @@ import (
 	"github.com/mura-s/learning/graphql/zenn-go-sample-github/graph"
 	"github.com/mura-s/learning/graphql/zenn-go-sample-github/graph/services"
 	"github.com/mura-s/learning/graphql/zenn-go-sample-github/internal"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 const (
@@ -35,8 +36,11 @@ func main() {
 	service := services.New(db)
 
 	srv := handler.NewDefaultServer(internal.NewExecutableSchema(internal.Config{Resolvers: &graph.Resolver{
-		Srv: service,
+		Srv:     service,
+		Loaders: graph.NewLoaders(service),
 	}}))
+
+	boil.DebugMode = true
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)

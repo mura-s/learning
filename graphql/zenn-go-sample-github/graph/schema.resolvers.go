@@ -6,11 +6,23 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/mura-s/learning/graphql/zenn-go-sample-github/graph/model"
 	"github.com/mura-s/learning/graphql/zenn-go-sample-github/internal"
 )
+
+// Author is the resolver for the author field.
+func (r *issueResolver) Author(ctx context.Context, obj *model.Issue) (*model.User, error) {
+	thunk := r.Loaders.UserLoader.Load(ctx, obj.Author.ID)
+	user, err := thunk()
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
 
 // AddProjectV2ItemByID is the resolver for the addProjectV2ItemById field.
 func (r *mutationResolver) AddProjectV2ItemByID(ctx context.Context, input model.AddProjectV2ItemByIDInput) (*model.AddProjectV2ItemByIDPayload, error) {
@@ -33,7 +45,23 @@ func (r *queryResolver) User(ctx context.Context, name string) (*model.User, err
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id string) (model.Node, error) {
-	panic(fmt.Errorf("not implemented: Node - node"))
+	nElems := strings.SplitN(id, "_", 2)
+	nType, _ := nElems[0], nElems[1]
+
+	switch nType {
+	case "U":
+		return r.Srv.GetUserByID(ctx, id)
+	case "REPO":
+		return r.Srv.GetRepoByID(ctx, id)
+	case "ISSUE":
+		return r.Srv.GetIssueByID(ctx, id)
+	// case "PJ":
+	// 	return r.Srv.GetProjectByID(ctx, id)
+	// case "PR":
+	// 	return r.Srv.GetPullRequestByID(ctx, id)
+	default:
+		return nil, errors.New("invalid ID")
+	}
 }
 
 // Owner is the resolver for the owner field.
@@ -48,7 +76,7 @@ func (r *repositoryResolver) Issue(ctx context.Context, obj *model.Repository, n
 
 // Issues is the resolver for the issues field.
 func (r *repositoryResolver) Issues(ctx context.Context, obj *model.Repository, after *string, before *string, first *int, last *int) (*model.IssueConnection, error) {
-	panic(fmt.Errorf("not implemented: Issues - issues"))
+	return r.Srv.ListIssueInRepository(ctx, obj.ID, after, before, first, last)
 }
 
 // PullRequest is the resolver for the pullRequest field.
@@ -61,6 +89,9 @@ func (r *repositoryResolver) PullRequests(ctx context.Context, obj *model.Reposi
 	panic(fmt.Errorf("not implemented: PullRequests - pullRequests"))
 }
 
+// Issue returns internal.IssueResolver implementation.
+func (r *Resolver) Issue() internal.IssueResolver { return &issueResolver{r} }
+
 // Mutation returns internal.MutationResolver implementation.
 func (r *Resolver) Mutation() internal.MutationResolver { return &mutationResolver{r} }
 
@@ -71,6 +102,7 @@ func (r *Resolver) Query() internal.QueryResolver { return &queryResolver{r} }
 func (r *Resolver) Repository() internal.RepositoryResolver { return &repositoryResolver{r} }
 
 type (
+	issueResolver      struct{ *Resolver }
 	mutationResolver   struct{ *Resolver }
 	queryResolver      struct{ *Resolver }
 	repositoryResolver struct{ *Resolver }

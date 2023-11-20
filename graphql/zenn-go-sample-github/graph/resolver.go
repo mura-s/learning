@@ -8,4 +8,5 @@ import "github.com/mura-s/learning/graphql/zenn-go-sample-github/graph/services"
 
 type Resolver struct {
 	Srv services.Services
+	*Loaders
 }

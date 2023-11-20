@@ -24,4 +24,4 @@ sqlboiler:
 
 .PHONY: gqlgen
 gqlgen:
-	gqlgen generate --config ./gplgen.yml
+	gqlgen generate --config ./gqlgen.yml
