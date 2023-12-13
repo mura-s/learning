@@ -1,14 +1,17 @@
 {
   "folders": [
-	{
-		"path": "."
-	},
-	{
-		"path": "graphql/zenn-go-sample-github"
-	},
-	{
-		"path": "graphql/zenn-go-sample"
-	}
-],
+    {
+      "path": "."
+    },
+    {
+      "path": "graphql/zenn-go-sample-github"
+    },
+    {
+      "path": "graphql/zenn-go-sample"
+    },
+    {
+      "path": "ts/pinia-storage"
+    }
+  ],
   "settings": {}
 }
