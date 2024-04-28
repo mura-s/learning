@@ -1,4 +1,4 @@
-class Main {
+class Ch1_7 {
     public static void main(String[] args) {
         System.out.println(calculateScore("imperative"));
         System.out.println(calculateScore("no"));
