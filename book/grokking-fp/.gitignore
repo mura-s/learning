@@ -1,1 +1,12 @@
+# vscode
+.vscode
+
+# metals plugin
+.bsp
+.metals
+
+# scala
+.scala-build
+
+# java
 *.class
