@@ -13,3 +13,4 @@
 dist/*
 target/
 *.class
+*.tasty
