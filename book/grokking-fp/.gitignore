@@ -1,12 +1,15 @@
+# macOS
+.DS_Store
+
 # vscode
 .vscode
 
-# metals plugin
-.bsp
-.metals
-
 # scala
+.metals
+.bsp
 .scala-build
 
-# java
+# output
+dist/*
+target/
 *.class
