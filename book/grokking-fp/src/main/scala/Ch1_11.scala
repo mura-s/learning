@@ -1,4 +1,4 @@
-object Ch1_11 {
+object App {
   def main(args: Array[String]): Unit = {
     println(increment(1))
     println(getFirstCharacter("hello"))
