@@ -7,14 +7,17 @@ object Ch3_19 {
   }
 
   def firstTwo(list: List[String]): List[String] =
-    list.take(2)
+    list.slice(0, 2)
 
   def lastTwo(list: List[String]): List[String] =
-    list.takeRight(2)
+    list.slice(list.size - 2, list.size)
 
   def movedFirstTwoToTheEnd(list: List[String]): List[String] =
     list.slice(2, list.size).appendedAll(firstTwo(list))
 
   def insertedBeforeLast(list: List[String], element: String): List[String] =
-    list.take(list.size - 1).appended(element).appendedAll(list.takeRight(1))
+    list
+      .slice(0, list.size - 1)
+      .appended(element)
+      .appendedAll(list.slice(list.size - 1, list.size))
 }
