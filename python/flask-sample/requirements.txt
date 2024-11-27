@@ -18,5 +18,5 @@ pylint==2.8.2
 pyparsing==2.4.7
 pytest==6.2.4
 toml==0.10.2
-Werkzeug==2.0.1
+Werkzeug==2.2.3
 wrapt==1.12.1
